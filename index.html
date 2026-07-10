@@ -17,29 +17,32 @@
 
   2. PRODUCTOS (agregar o quitar):
      Cada producto es un bloque <div class="product-card"> ... </div>
+     Al hacer clic en la tarjeta, se abre una ficha con las fotos, el
+     video, el título, el precio, la descripción y el botón de compra.
      Copia un bloque completo, pégalo debajo del último, y cambia:
        - el nombre en <h3>
        - el precio en <span class="price">
-       - el texto después de "text=" en el enlace de WhatsApp
+       - el texto dentro de <p class="product-desc-hidden">...</p>
+         (esta es la descripción que se ve en la ficha del producto)
+     El mensaje de WhatsApp se arma solo con el nombre del producto,
+     no necesitas escribirlo a mano.
      Para BORRAR un producto, borra el bloque completo desde
      <div class="product-card"> hasta su </div> de cierre (el que
-     le corresponde, el 4to </div> contando desde el inicio del bloque).
+     le corresponde, el 3er </div> contando desde el inicio del bloque).
 
   3. FOTOS Y VIDEOS DE UN PRODUCTO (galería):
      Dentro de cada producto hay un bloque así:
 
-       <div class="product-media" data-media>
-         <div class="media-item active"><div class="product-ph">🏠</div></div>
-         <button class="media-nav prev" aria-label="Foto anterior">‹</button>
-         <button class="media-nav next" aria-label="Foto siguiente">›</button>
-         <div class="media-dots"></div>
+       <div class="product-media">
+         <div class="media-item"><div class="product-ph">🏠</div></div>
        </div>
 
      Cada <div class="media-item">...</div> es UNA foto (o un video).
      Puedes tener todas las que quieras — no importa si son de
-     tamaños o formas distintas, la página las ajusta sola. Las
-     flechas y los puntitos de abajo aparecen SOLOS apenas hay más
-     de una foto/video — no tienes que tocar nada más.
+     tamaños o formas distintas, la página las ajusta sola. En la
+     tarjeta del catálogo solo se ve la primera; al hacer clic, en la
+     ficha del producto aparecen todas, con flechas y puntitos para
+     pasarlas — eso también aparece solo, no tienes que tocar nada.
 
      ➤ PARA AGREGAR UNA FOTO:
        Agrega una línea nueva justo antes de </div> (el que cierra
@@ -54,9 +57,8 @@
      ➤ PARA QUITAR UNA FOTO O VIDEO:
        Borra ese bloque completo <div class="media-item">...</div>
 
-     ➤ IMPORTANTE: debe quedar SIEMPRE al menos un media-item, y
-       solo el PRIMERO debe tener la palabra "active"
-       (class="media-item active"); los demás van sin ella.
+     ➤ IMPORTANTE: debe quedar SIEMPRE al menos un media-item. El
+       orden en que los escribas es el orden en que se ven.
 
   4. LOGO:
      Está en assets/logo.png — solo reemplaza ese archivo por otro
@@ -237,112 +239,82 @@
 
     <div class="catalog-grid">
 
-      <div class="product-card reveal">
-        <div class="product-media has-multiple" data-media>
-          <div class="media-item active"><div class="product-ph">🏠</div></div>
+      <div class="product-card reveal" tabindex="0" role="button" aria-haspopup="dialog">
+        <div class="product-media">
+          <div class="media-item"><div class="product-ph">🏠</div></div>
           <div class="media-item"><div class="product-ph">🛋️</div></div>
-          <button class="media-nav prev" aria-label="Foto anterior">‹</button>
-          <button class="media-nav next" aria-label="Foto siguiente">›</button>
-          <div class="media-dots"></div>
         </div>
         <div class="product-body">
           <span class="product-tag">Hogar</span>
           <h3>Nombre del producto</h3>
           <span class="price">$ 00.000</span>
-          <a class="product-btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%2C%20me%20interesa%20este%20producto%20de%20Hogar">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
-            Preguntar por este
-          </a>
+          <p class="product-desc-hidden">Descripción breve del producto: material, tamaño, para qué sirve y qué incluye. Este texto se ve completo dentro de la ficha del producto.</p>
+          <span class="product-view-hint">Ver detalles <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
       </div>
 
-      <div class="product-card reveal">
-        <div class="product-media" data-media>
-          <div class="media-item active"><div class="product-ph">🔌</div></div>
-          <button class="media-nav prev" aria-label="Foto anterior">‹</button>
-          <button class="media-nav next" aria-label="Foto siguiente">›</button>
-          <div class="media-dots"></div>
+      <div class="product-card reveal" tabindex="0" role="button" aria-haspopup="dialog">
+        <div class="product-media">
+          <div class="media-item"><div class="product-ph">🔌</div></div>
         </div>
         <div class="product-body">
           <span class="product-tag">Gadgets</span>
           <h3>Nombre del producto</h3>
           <span class="price">$ 00.000</span>
-          <a class="product-btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%2C%20me%20interesa%20este%20producto%20de%20Gadgets">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
-            Preguntar por este
-          </a>
+          <p class="product-desc-hidden">Descripción breve del producto: material, tamaño, para qué sirve y qué incluye.</p>
+          <span class="product-view-hint">Ver detalles <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
       </div>
 
-      <div class="product-card reveal">
-        <div class="product-media" data-media>
-          <div class="media-item active"><div class="product-ph">🎒</div></div>
-          <button class="media-nav prev" aria-label="Foto anterior">‹</button>
-          <button class="media-nav next" aria-label="Foto siguiente">›</button>
-          <div class="media-dots"></div>
+      <div class="product-card reveal" tabindex="0" role="button" aria-haspopup="dialog">
+        <div class="product-media">
+          <div class="media-item"><div class="product-ph">🎒</div></div>
         </div>
         <div class="product-body">
           <span class="product-tag">Moda</span>
           <h3>Nombre del producto</h3>
           <span class="price">$ 00.000</span>
-          <a class="product-btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%2C%20me%20interesa%20este%20producto%20de%20Moda">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
-            Preguntar por este
-          </a>
+          <p class="product-desc-hidden">Descripción breve del producto: material, tamaño, para qué sirve y qué incluye.</p>
+          <span class="product-view-hint">Ver detalles <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
       </div>
 
-      <div class="product-card reveal">
-        <div class="product-media" data-media>
-          <div class="media-item active"><div class="product-ph">🏠</div></div>
-          <button class="media-nav prev" aria-label="Foto anterior">‹</button>
-          <button class="media-nav next" aria-label="Foto siguiente">›</button>
-          <div class="media-dots"></div>
+      <div class="product-card reveal" tabindex="0" role="button" aria-haspopup="dialog">
+        <div class="product-media">
+          <div class="media-item"><div class="product-ph">🏠</div></div>
         </div>
         <div class="product-body">
           <span class="product-tag">Hogar</span>
           <h3>Nombre del producto</h3>
           <span class="price">$ 00.000</span>
-          <a class="product-btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%2C%20me%20interesa%20este%20producto%20de%20Hogar">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
-            Preguntar por este
-          </a>
+          <p class="product-desc-hidden">Descripción breve del producto: material, tamaño, para qué sirve y qué incluye.</p>
+          <span class="product-view-hint">Ver detalles <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
       </div>
 
-      <div class="product-card reveal">
-        <div class="product-media" data-media>
-          <div class="media-item active"><div class="product-ph">🔌</div></div>
-          <button class="media-nav prev" aria-label="Foto anterior">‹</button>
-          <button class="media-nav next" aria-label="Foto siguiente">›</button>
-          <div class="media-dots"></div>
+      <div class="product-card reveal" tabindex="0" role="button" aria-haspopup="dialog">
+        <div class="product-media">
+          <div class="media-item"><div class="product-ph">🔌</div></div>
         </div>
         <div class="product-body">
           <span class="product-tag">Gadgets</span>
           <h3>Nombre del producto</h3>
           <span class="price">$ 00.000</span>
-          <a class="product-btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%2C%20me%20interesa%20este%20producto%20de%20Gadgets">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
-            Preguntar por este
-          </a>
+          <p class="product-desc-hidden">Descripción breve del producto: material, tamaño, para qué sirve y qué incluye.</p>
+          <span class="product-view-hint">Ver detalles <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
       </div>
 
-      <div class="product-card reveal">
-        <div class="product-media" data-media>
-          <div class="media-item active"><div class="product-ph">🎒</div></div>
-          <button class="media-nav prev" aria-label="Foto anterior">‹</button>
-          <button class="media-nav next" aria-label="Foto siguiente">›</button>
-          <div class="media-dots"></div>
+      <div class="product-card reveal" tabindex="0" role="button" aria-haspopup="dialog">
+        <div class="product-media">
+          <div class="media-item"><div class="product-ph">🎒</div></div>
         </div>
         <div class="product-body">
           <span class="product-tag">Moda</span>
           <h3>Nombre del producto</h3>
           <span class="price">$ 00.000</span>
-          <a class="product-btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%2C%20me%20interesa%20este%20producto%20de%20Moda">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
-            Preguntar por este
-          </a>
+          <p class="product-desc-hidden">Descripción breve del producto: material, tamaño, para qué sirve y qué incluye.</p>
+          <span class="product-view-hint">Ver detalles <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
       </div>
 
@@ -535,6 +507,28 @@
   </div>
 </footer>
 
+<!-- ============ FICHA DE PRODUCTO (se abre al hacer clic en una tarjeta) ============ -->
+<div class="product-modal-overlay" id="productModal" role="dialog" aria-modal="true">
+  <div class="product-modal">
+    <button class="product-modal-close" id="productModalClose" aria-label="Cerrar">✕</button>
+    <div class="product-modal-media" id="productModalMedia">
+      <button class="media-nav prev" aria-label="Foto anterior">‹</button>
+      <button class="media-nav next" aria-label="Foto siguiente">›</button>
+      <div class="media-dots"></div>
+    </div>
+    <div class="product-modal-body">
+      <span class="product-tag" id="productModalTag"></span>
+      <h3 id="productModalTitle"></h3>
+      <span class="price" id="productModalPrice"></span>
+      <p class="product-modal-desc" id="productModalDesc"></p>
+      <a class="btn" id="productModalCta" data-wa-gate href="#">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Zm4-5.4c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.9-.3-1.7-1-.6-.6-1-1.3-1.1-1.5-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 3.9 3.4.5.2.9.3 1.3.4.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1Z"/></svg>
+        Comprar por WhatsApp
+      </a>
+    </div>
+  </div>
+</div>
+
 <!-- ============ AVISO PREVIO A LA COMPRA (obligatorio) ============ -->
 <div class="wa-modal-overlay" id="waModal">
   <div class="wa-modal">
@@ -617,41 +611,101 @@
     root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
   });
 
-  // ---------- GALERÍA DE FOTOS / VIDEO POR PRODUCTO ----------
-  document.querySelectorAll('[data-media]').forEach(function(media){
-    const items = Array.from(media.querySelectorAll('.media-item'));
-    if(items.length <= 1) return;
+  // ---------- FICHA DE PRODUCTO (clic en la tarjeta abre la ficha completa) ----------
+  const productModal = document.getElementById('productModal');
+  const productModalClose = document.getElementById('productModalClose');
+  const productModalMedia = document.getElementById('productModalMedia');
+  const productModalTag = document.getElementById('productModalTag');
+  const productModalTitle = document.getElementById('productModalTitle');
+  const productModalPrice = document.getElementById('productModalPrice');
+  const productModalDesc = document.getElementById('productModalDesc');
+  const productModalCta = document.getElementById('productModalCta');
 
-    media.classList.add('has-multiple');
+  let currentMediaIndex = 0;
 
-    // construir puntos de navegación
-    const dotsWrap = media.querySelector('.media-dots');
-    items.forEach(function(_, i){
+  function renderModalMedia(items){
+    // limpia los media-item y los puntos anteriores, dejando los botones prev/next
+    productModalMedia.querySelectorAll('.media-item, .media-dot').forEach(function(el){ el.remove(); });
+    const dotsWrap = productModalMedia.querySelector('.media-dots');
+    dotsWrap.innerHTML = '';
+
+    items.forEach(function(item, i){
+      const clone = item.cloneNode(true);
+      clone.classList.toggle('active', i === 0);
+      productModalMedia.insertBefore(clone, productModalMedia.firstChild);
+
       const dot = document.createElement('button');
       dot.className = 'media-dot' + (i === 0 ? ' active' : '');
       dot.setAttribute('aria-label', 'Ver foto ' + (i + 1));
-      dot.addEventListener('click', function(){ showMedia(i); });
+      dot.addEventListener('click', function(){ showModalMedia(i); });
       dotsWrap.appendChild(dot);
     });
 
-    const dots = Array.from(dotsWrap.querySelectorAll('.media-dot'));
-    const prevBtn = media.querySelector('.media-nav.prev');
-    const nextBtn = media.querySelector('.media-nav.next');
-    let currentIndex = 0;
+    productModalMedia.classList.toggle('has-multiple', items.length > 1);
+    currentMediaIndex = 0;
+  }
 
-    function showMedia(index){
-      items[currentIndex].classList.remove('active');
-      dots[currentIndex].classList.remove('active');
-      const video = items[currentIndex].querySelector('video');
-      if(video){ video.pause(); }
+  function showModalMedia(index){
+    const items = Array.from(productModalMedia.querySelectorAll('.media-item'));
+    const dots = Array.from(productModalMedia.querySelectorAll('.media-dot'));
+    if(items.length === 0) return;
 
-      currentIndex = (index + items.length) % items.length;
-      items[currentIndex].classList.add('active');
-      dots[currentIndex].classList.add('active');
+    const currentVideo = items[currentMediaIndex].querySelector('video');
+    if(currentVideo){ currentVideo.pause(); }
+    items[currentMediaIndex].classList.remove('active');
+    dots[currentMediaIndex].classList.remove('active');
+
+    currentMediaIndex = (index + items.length) % items.length;
+    items[currentMediaIndex].classList.add('active');
+    dots[currentMediaIndex].classList.add('active');
+  }
+
+  productModalMedia.querySelector('.media-nav.prev').addEventListener('click', function(){ showModalMedia(currentMediaIndex - 1); });
+  productModalMedia.querySelector('.media-nav.next').addEventListener('click', function(){ showModalMedia(currentMediaIndex + 1); });
+
+  function openProductModal(card){
+    const title = card.querySelector('h3').textContent.trim();
+    const price = card.querySelector('.price').textContent.trim();
+    const tag = card.querySelector('.product-tag').textContent.trim();
+    const descEl = card.querySelector('.product-desc-hidden');
+    const mediaItems = Array.from(card.querySelectorAll('.product-media .media-item'));
+
+    productModalTag.textContent = tag;
+    productModalTitle.textContent = title;
+    productModalPrice.textContent = price;
+    productModalDesc.textContent = descEl ? descEl.textContent.trim() : '';
+
+    const waMessage = 'Hola, me interesa este producto: ' + title;
+    productModalCta.setAttribute('href', 'https://wa.me/573241482071?text=' + encodeURIComponent(waMessage));
+
+    renderModalMedia(mediaItems);
+    productModal.classList.add('open');
+  }
+
+  function closeProductModal(){
+    productModalMedia.querySelectorAll('video').forEach(function(v){ v.pause(); });
+    productModal.classList.remove('open');
+  }
+
+  document.querySelectorAll('.product-card').forEach(function(card){
+    card.addEventListener('click', function(){ openProductModal(card); });
+    card.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        openProductModal(card);
+      }
+    });
+  });
+
+  productModalClose.addEventListener('click', closeProductModal);
+  productModal.addEventListener('click', function(e){
+    if(e.target === productModal){ closeProductModal(); }
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      closeProductModal();
+      waModal.classList.remove('open');
     }
-
-    if(prevBtn) prevBtn.addEventListener('click', function(){ showMedia(currentIndex - 1); });
-    if(nextBtn) nextBtn.addEventListener('click', function(){ showMedia(currentIndex + 1); });
   });
 </script>
 
