@@ -401,100 +401,46 @@
 
 <script>
 // ============================
-// PRODUCT DATA
+// PRODUCT DATA — carga desde products.json
 // ============================
 const LS_KEY_PRODUCTS = 'nenechi_products';
-
-function getDefaultProducts() {
-  return [
-    {
-      id: 'p1',
-      name: 'Nombre del producto',
-      tag: 'Hogar',
-      price: '96000',
-      oldPrice: '120000',
-      desc: 'Descripcion breve del producto: material, tamano, para que sirve y que incluye. Este texto se ve completo dentro de la ficha del producto.',
-      media: [
-        {type:'emoji',content:'🏠'},
-        {type:'emoji',content:'🛋️'}
-      ],
-      hidden: false
-    },
-    {
-      id: 'p2',
-      name: 'Nombre del producto',
-      tag: 'Gadgets',
-      price: '00000',
-      oldPrice: '',
-      desc: 'Descripcion breve del producto: material, tamano, para que sirve y que incluye.',
-      media: [
-        {type:'emoji',content:'🔌'}
-      ],
-      hidden: false
-    },
-    {
-      id: 'p3',
-      name: 'Nombre del producto',
-      tag: 'Moda',
-      price: '00000',
-      oldPrice: '',
-      desc: 'Descripcion breve del producto: material, tamano, para que sirve y que incluye.',
-      media: [
-        {type:'emoji',content:'🎒'}
-      ],
-      hidden: false
-    },
-    {
-      id: 'p4',
-      name: 'Nombre del producto',
-      tag: 'Hogar',
-      price: '00000',
-      oldPrice: '',
-      desc: 'Descripcion breve del producto: material, tamano, para que sirve y que incluye.',
-      media: [
-        {type:'emoji',content:'🏠'}
-      ],
-      hidden: false
-    },
-    {
-      id: 'p5',
-      name: 'Nombre del producto',
-      tag: 'Gadgets',
-      price: '00000',
-      oldPrice: '',
-      desc: 'Descripcion breve del producto: material, tamano, para que sirve y que incluye.',
-      media: [
-        {type:'emoji',content:'🔌'}
-      ],
-      hidden: false
-    },
-    {
-      id: 'p6',
-      name: 'Nombre del producto',
-      tag: 'Moda',
-      price: '00000',
-      oldPrice: '',
-      desc: 'Descripcion breve del producto: material, tamano, para que sirve y que incluye.',
-      media: [
-        {type:'emoji',content:'🎒'}
-      ],
-      hidden: false
-    }
-  ];
-}
-
-function getProducts() {
-  const stored = localStorage.getItem(LS_KEY_PRODUCTS);
-  if (stored) {
-    try { return JSON.parse(stored); } catch(e) {}
-  }
-  return getDefaultProducts();
-}
+let _cachedProducts = null;
 
 function formatPrice(val) {
   const num = parseInt(val.replace(/[^0-9]/g, ''));
   if (isNaN(num)) return '00.000';
   return num.toLocaleString('es-CO');
+}
+
+async function loadProducts() {
+  // 1. Intentar cargar desde products.json (la fuente de verdad para todos los visitantes)
+  try {
+    const response = await fetch('products.json?v=' + Date.now());
+    if (response.ok) {
+      const products = await response.json();
+      _cachedProducts = products;
+      // Cache en localStorage para offline
+      try { localStorage.setItem(LS_KEY_PRODUCTS, JSON.stringify(products)); } catch(e) {}
+      return products;
+    }
+  } catch(e) {}
+
+  // 2. Fallback: cargar desde localStorage (cache offline)
+  try {
+    const stored = localStorage.getItem(LS_KEY_PRODUCTS);
+    if (stored) {
+      _cachedProducts = JSON.parse(stored);
+      return _cachedProducts;
+    }
+  } catch(e) {}
+
+  // 3. Si todo falla, retornar vacio (no hardcodeamos defaults aqui)
+  _cachedProducts = [];
+  return [];
+}
+
+function getProducts() {
+  return _cachedProducts || [];
 }
 
 // ============================
@@ -504,9 +450,13 @@ function renderCatalog() {
   const products = getProducts().filter(p => !p.hidden);
   const grid = document.getElementById('catalogGrid');
 
+  if (products.length === 0) {
+    grid.innerHTML = '<p style="text-align:center;color:var(--ink-soft);padding:40px;">No hay productos disponibles en este momento.</p>';
+    return;
+  }
+
   grid.innerHTML = products.map(p => {
     // Build media HTML
-    let mediaHtml = '';
     let hasDiscount = !!p.oldPrice;
     let discountBadge = '';
 
@@ -573,8 +523,24 @@ function renderCatalog() {
 // ============================
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Render catalog from localStorage
-renderCatalog();
+// Render catalog from products.json
+loadProducts().then(function(){
+  renderCatalog();
+  // Re-init scroll reveal after render
+  document.querySelectorAll('.reveal').forEach(function(el){
+    if(!el.classList.contains('show')){
+      const observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            entry.target.classList.add('show');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {threshold:0.15});
+      observer.observe(el);
+    }
+  });
+});
 
 // scroll reveal
 const items = document.querySelectorAll('.reveal');
