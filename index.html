@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nenechi — Para tu casa, sin vueltas</title>
+<meta name="description" content="Nenechi: hogar, gadgets y moda con envíos a nivel nacional. Habla directo con nosotros por WhatsApp.">
+
+<!--
+  ============================================================
+  GUÍA RÁPIDA PARA EDITAR ESTE ARCHIVO (sin saber programar)
+  ============================================================
+  1. NÚMERO DE WHATSAPP:
+     Busca la palabra  573241482071  en este archivo (Ctrl+F / Cmd+F)
+     y reemplázala por tu número completo con indicativo de país,
+     SIN el símbolo +. Ejemplo: 573001234567
+     Aparece varias veces (botón flotante, botones de producto, CTA final).
+
+  2. PRODUCTOS:
+     Cada producto es un bloque <div class="product-card"> ... </div>
+     Copia un bloque completo, pégalo debajo del último, y cambia:
+       - el texto dentro de <div class="product-ph">...</div> (ícono/emoji placeholder)
+       - el nombre en <h3>
+       - el precio en <span class="price">
+       - el texto del mensaje de WhatsApp en data-msg
+     Para poner una FOTO real en vez del ícono placeholder, reemplaza
+     el <div class="product-ph">...</div> por:
+       <img src="assets/products/TU-FOTO.jpg" alt="nombre del producto">
+     y guarda tus fotos dentro de la carpeta assets/products/
+
+  3. LOGO:
+     Está en assets/logo.png — solo reemplaza ese archivo por otro
+     con el mismo nombre para cambiar el logo en todo el sitio.
+
+  4. TESTIMONIOS Y PREGUNTAS FRECUENTES:
+     Son textos normales dentro de la página, edítalos directamente
+     como si fuera un documento de texto.
+  ============================================================
+-->
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+
+  :root{
+    --paper:#FAFAF7;
+    --paper-2:#F1ECFB;
+    --ink:#18151F;
+    --ink-soft:#5B5566;
+    --accent:#5E17EB;
+    --accent-deep:#3D0FA3;
+    --accent-glow:#8B5CF6;
+    --line:#E4DEF2;
+    --radius:18px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Plus Jakarta Sans', sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Familjen Grotesk', sans-serif;
+    font-weight:800;
+    letter-spacing:-0.02em;
+    line-height:1.05;
+  }
+
+  .mono{
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:0.04em;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(250,250,247,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 24px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Familjen Grotesk', sans-serif;
+    font-weight:800;
+    font-size:1.25rem;
+  }
+  .brand img{width:34px;height:34px;object-fit:contain;}
+  nav.links{
+    display:flex;
+    gap:32px;
+    font-size:0.95rem;
+    font-weight:600;
+  }
+  nav.links a{opacity:0.75; transition:opacity .2s;}
+  nav.links a:hover{opacity:1;}
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--accent);
+    color:#fff;
+    padding:12px 22px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.95rem;
+    border:none;
+    cursor:pointer;
+    transition:transform .18s ease, background .18s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{background:var(--accent-deep); transform:translateY(-1px);}
+  .btn svg{width:18px;height:18px;flex-shrink:0;}
+
+  @media (max-width:860px){
+    nav.links{display:none;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:72px 0 40px;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:56px;
+    align-items:center;
+  }
+  @media (max-width:940px){
+    .hero-grid{grid-template-columns:1fr; gap:44px;}
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.75rem;
+    text-transform:uppercase;
+    color:var(--accent-deep);
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    padding:7px 14px;
+    border-radius:999px;
+    margin-bottom:22px;
+  }
+  .eyebrow .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;} 50%{opacity:0.35;}
+  }
+
+  h1{
+    font-size:clamp(2.1rem, 4.2vw, 3.4rem);
+    margin-bottom:20px;
+  }
+  h1 .hl{color:var(--accent);}
+
+  .hero p.lead{
+    font-size:1.08rem;
+    color:var(--ink-soft);
+    max-width:46ch;
+    margin-bottom:30px;
+  }
+
+  .hero-ctas{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    flex-wrap:wrap;
+  }
+  .hero-ctas .sub{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+  }
+
+  /* ---- signature element: shipping ticket ---- */
+  .ticket-wrap{
+    position:relative;
+    display:flex;
+    justify-content:center;
+  }
+  .ticket{
+    position:relative;
+    width:100%;
+    max-width:400px;
+    background:#fff;
+    border-radius:20px;
+    border:1px solid var(--line);
+    box-shadow:0 30px 60px -20px rgba(94,23,235,0.25);
+    padding:28px 26px 22px;
+  }
+  .ticket::before, .ticket::after{
+    content:"";
+    position:absolute;
+    width:26px;height:26px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:50%;
+    top:50%;
+    transform:translateY(-50%);
+  }
+  .ticket::before{left:-13px;}
+  .ticket::after{right:-13px;}
+  .ticket-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:18px;
+  }
+  .ticket-stamp{
+    width:46px;height:46px;
+    background:var(--accent);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transform:rotate(-8deg);
+    box-shadow:0 8px 18px -6px rgba(94,23,235,0.55);
+  }
+  .ticket-stamp img{width:24px;height:24px;filter:brightness(0) invert(1);}
+  .ticket-id{
+    font-size:0.68rem;
+    text-align:right;
+    color:var(--ink-soft);
+  }
+  .ticket-route{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:22px 0 20px;
+  }
+  .route-city{
+    font-size:0.72rem;
+    font-weight:700;
+  }
+  .route-line{
+    flex:1;
+    position:relative;
+    height:2px;
+    background:repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 12px);
+  }
+  .route-dot{
+    position:absolute;
+    top:50%;
+    left:0;
+    width:9px;height:9px;
+    border-radius:50%;
+    background:var(--accent);
+    transform:translate(-50%,-50%);
+    animation:travel 3.2s ease-in-out infinite;
+    box-shadow:0 0 0 4px rgba(94,23,235,0.15);
+  }
+  @keyframes travel{
+    0%{left:2%;}
+    50%{left:98%;}
+    100%{left:2%;}
+  }
+  .ticket-divider{
+    border:none;
+    border-top:1.5px dashed var(--line);
+    margin:18px 0;
+  }
+  .ticket-rows{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .ticket-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:0.82rem;
+  }
+  .ticket-row span:first-child{color:var(--ink-soft);}
+  .ticket-row span:last-child{font-weight:700;}
+  .ticket-status{
+    margin-top:18px;
+    background:var(--paper-2);
+    border-radius:12px;
+    padding:10px 14px;
+    font-size:0.78rem;
+    font-weight:600;
+    color:var(--accent-deep);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .ticket-status .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--accent);
+    animation:pulse 2s infinite;
+  }
+
+  /* ---------- TRUST BADGES ---------- */
+  .badges-section{padding:0 0 44px;}
+  .badges-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+  }
+  @media (max-width:780px){.badges-grid{grid-template-columns:repeat(2,1fr);}}
+  .badge-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 18px;
+    font-size:0.88rem;
+    font-weight:700;
+    color:var(--ink);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  a.badge-item:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 28px -18px rgba(24,21,31,0.22);
+  }
+  .badge-icon{
+    width:34px;height:34px;
+    flex-shrink:0;
+    border-radius:9px;
+    background:var(--paper-2);
+    color:var(--accent-deep);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .badge-icon svg{width:19px;height:19px;}
+
+  /* ---------- TRUST STRIP ---------- */
+  .strip{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:var(--paper-2);
+    overflow:hidden;
+    padding:16px 0;
+  }
+  .strip-track{
+    display:flex;
+    gap:48px;
+    white-space:nowrap;
+    animation:scroll 26s linear infinite;
+    width:max-content;
+  }
+  .strip-track span{
+    font-size:0.85rem;
+    font-weight:700;
+    color:var(--accent-deep);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .strip-track span::before{
+    content:"●";
+    font-size:0.5rem;
+    color:var(--accent);
+  }
+  @keyframes scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .strip-track, .route-dot, .eyebrow .dot, .ticket-status .dot{animation:none;}
+  }
+
+  /* ---------- SECTIONS COMMON ---------- */
+  section{padding:88px 0;}
+  .section-head{
+    max-width:640px;
+    margin:0 auto 48px;
+    text-align:center;
+  }
+  .section-head h2{
+    font-size:clamp(1.7rem, 3vw, 2.3rem);
+    margin-bottom:14px;
+  }
+  .section-head p{color:var(--ink-soft); font-size:1.02rem;}
+
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .reveal.show{opacity:1; transform:none;}
+
+  /* ---------- CATEGORIES ---------- */
+  .cats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+  }
+  @media (max-width:780px){.cats{grid-template-columns:1fr;}}
+  .cat-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:30px;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .cat-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 20px 40px -22px rgba(24,21,31,0.18);
+  }
+  .cat-icon{
+    width:48px;height:48px;
+    border-radius:12px;
+    background:var(--paper-2);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:18px;
+    font-size:1.4rem;
+  }
+  .cat-card h3{font-size:1.15rem; margin-bottom:8px;}
+  .cat-card p{color:var(--ink-soft); font-size:0.92rem;}
+
+  /* ---------- CATALOG ---------- */
+  .catalog-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+  }
+  @media (max-width:940px){.catalog-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:600px){.catalog-grid{grid-template-columns:1fr;}}
+
+  .product-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .product-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 22px 44px -24px rgba(24,21,31,0.2);
+  }
+  .product-ph{
+    aspect-ratio:1/1;
+    background:linear-gradient(135deg, var(--paper-2), #fff);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:2.6rem;
+    border-bottom:1px solid var(--line);
+  }
+  .product-body{padding:20px;}
+  .product-tag{
+    font-size:0.68rem;
+    color:var(--accent-deep);
+    background:var(--paper-2);
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:999px;
+    margin-bottom:10px;
+  }
+  .product-card h3{font-size:1.05rem; margin-bottom:6px; font-family:'Plus Jakarta Sans'; font-weight:700;}
+  .product-card .price{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:600;
+    color:var(--ink);
+    font-size:1rem;
+    display:block;
+    margin-bottom:16px;
+  }
+  .product-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    padding:11px;
+    border-radius:12px;
+    background:var(--paper-2);
+    color:var(--accent-deep);
+    font-weight:700;
+    font-size:0.88rem;
+    border:1px solid var(--line);
+    transition:background .2s ease, color .2s ease;
+  }
+  .product-btn:hover{background:var(--accent); color:#fff;}
+  .product-btn svg{width:16px;height:16px;}
+
+  /* ---------- WHY TRUST ---------- */
+  .why{
+    background:var(--paper-2);
+  }
+  .why-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:2px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  @media (max-width:780px){.why-grid{grid-template-columns:1fr;}}
+  .why-item{
+    background:var(--paper-2);
+    padding:34px;
+  }
+  .why-item h3{
+    font-size:1.05rem;
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .why-item h3 svg{width:22px;height:22px; color:var(--accent); flex-shrink:0;}
+  .why-item p{color:var(--ink-soft); font-size:0.92rem;}
+
+  /* ---------- DEVOLUCIONES ---------- */
+  .returns{background:var(--paper-2);}
+  .returns-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    margin-bottom:30px;
+  }
+  @media (max-width:940px){.returns-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.returns-grid{grid-template-columns:1fr;}}
+  .returns-item{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px;
+  }
+  .returns-icon{
+    width:42px;height:42px;
+    border-radius:10px;
+    background:var(--paper-2);
+    color:var(--accent-deep);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:16px;
+  }
+  .returns-icon svg{width:22px;height:22px;}
+  .returns-item h3{font-size:1.02rem; margin-bottom:8px; font-family:'Plus Jakarta Sans'; font-weight:700;}
+  .returns-item p{color:var(--ink-soft); font-size:0.88rem;}
+  .returns-note{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:0.92rem;
+    max-width:56ch;
+    margin:0 auto;
+  }
+
+  /* ---------- TESTIMONIOS ---------- */
+  .testi-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+  }
+  @media (max-width:860px){.testi-grid{grid-template-columns:1fr;}}
+  .testi-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px;
+  }
+  .testi-stars{color:var(--accent); margin-bottom:14px; font-size:0.95rem;}
+  .testi-card p{font-size:0.95rem; margin-bottom:18px;}
+  .testi-name{font-weight:700; font-size:0.88rem;}
+  .testi-loc{color:var(--ink-soft); font-size:0.8rem;}
+
+  /* ---------- FAQ ---------- */
+  .faq{max-width:760px; margin:0 auto;}
+  details{
+    border-bottom:1px solid var(--line);
+    padding:20px 0;
+  }
+  summary{
+    cursor:pointer;
+    font-weight:700;
+    font-size:1.02rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    list-style:none;
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary::after{
+    content:"+";
+    font-size:1.4rem;
+    color:var(--accent);
+    transition:transform .2s ease;
+  }
+  details[open] summary::after{transform:rotate(45deg);}
+  details p{
+    margin-top:12px;
+    color:var(--ink-soft);
+    font-size:0.94rem;
+    max-width:60ch;
+  }
+
+  /* ---------- CTA BAND ---------- */
+  .cta-band{
+    background:linear-gradient(135deg, var(--accent), var(--accent-deep));
+    color:#fff;
+    text-align:center;
+    padding:70px 24px;
+    border-radius:28px;
+    margin:0 24px;
+  }
+  .cta-band h2{color:#fff; font-size:clamp(1.6rem,3vw,2.2rem); margin-bottom:14px;}
+  .cta-band p{color:rgba(255,255,255,0.82); margin-bottom:28px; max-width:50ch; margin-left:auto; margin-right:auto;}
+  .cta-band .btn{background:#fff; color:var(--accent-deep);}
+  .cta-band .btn:hover{background:#f2edff;}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:56px 0 40px;}
+  .foot-grid{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:32px;
+    border-top:1px solid var(--line);
+    padding-top:36px;
+  }
+  .foot-brand{max-width:280px;}
+  .foot-brand .brand{margin-bottom:12px;}
+  .foot-brand p{color:var(--ink-soft); font-size:0.88rem;}
+  .foot-cols{display:flex; gap:56px; flex-wrap:wrap;}
+  .foot-col h4{font-size:0.82rem; text-transform:uppercase; color:var(--ink-soft); margin-bottom:14px; letter-spacing:0.05em;}
+  .foot-col a, .foot-col p{display:block; font-size:0.92rem; margin-bottom:10px; opacity:0.85;}
+  .foot-bottom{
+    text-align:center;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    margin-top:40px;
+  }
+  .fill-note{font-family:'JetBrains Mono', monospace; font-size:0.78rem;}
+
+  /* ---------- AVISO PREVIO A LA COMPRA (modal) ---------- */
+  .wa-modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(24,21,31,0.55);
+    backdrop-filter:blur(3px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+    padding:20px;
+  }
+  .wa-modal-overlay.open{display:flex;}
+  .wa-modal{
+    position:relative;
+    background:#fff;
+    border-radius:20px;
+    max-width:420px;
+    width:100%;
+    padding:32px 28px 28px;
+    box-shadow:0 30px 60px -20px rgba(24,21,31,0.35);
+  }
+  .wa-modal h3{font-size:1.2rem; margin-bottom:16px; padding-right:20px;}
+  .wa-modal-close{
+    position:absolute;
+    top:18px; right:18px;
+    background:none;
+    border:none;
+    font-size:1rem;
+    color:var(--ink-soft);
+    cursor:pointer;
+    line-height:1;
+  }
+  .wa-modal-list{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-bottom:20px;
+  }
+  .wa-modal-list li{
+    font-size:0.86rem;
+    color:var(--ink-soft);
+    padding-left:18px;
+    position:relative;
+  }
+  .wa-modal-list li::before{
+    content:"";
+    position:absolute;
+    left:0; top:7px;
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--accent);
+  }
+  .wa-modal-check{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    margin-bottom:20px;
+    cursor:pointer;
+  }
+  .wa-modal-check input{
+    margin-top:2px;
+    width:16px;height:16px;
+    accent-color:var(--accent);
+    flex-shrink:0;
+    cursor:pointer;
+  }
+  .wa-modal-check a{color:var(--accent-deep); font-weight:700;}
+  .wa-modal-continue{
+    width:100%;
+    justify-content:center;
+    opacity:1;
+  }
+  .wa-modal-continue:disabled{
+    background:var(--line);
+    color:var(--ink-soft);
+    cursor:not-allowed;
+  }
+  .wa-modal-continue:disabled:hover{background:var(--line);}
+
+  /* ---------- FLOATING WHATSAPP ---------- */
+  .float-wa{
+    position:fixed;
+    bottom:24px;
+    right:24px;
+    z-index:60;
+    background:var(--accent);
+    color:#fff;
+    width:60px;height:60px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 14px 30px -8px rgba(94,23,235,0.55);
+    transition:transform .2s ease;
+  }
+  .float-wa:hover{transform:scale(1.08);}
+  .float-wa svg{width:28px;height:28px;}
+  .float-wa .ring{
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    border:2px solid var(--accent);
+    animation:ring 2.4s ease-out infinite;
+  }
+  @keyframes ring{
+    0%{transform:scale(1); opacity:0.6;}
+    100%{transform:scale(1.6); opacity:0;}
+  }
+  @media (prefers-reduced-motion:reduce){.float-wa .ring{animation:none;}}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header>
+  <div class="nav wrap">
+    <div class="brand">
+      <img src="assets/logo.png" alt="Nenechi">
+      Nenechi
+    </div>
+    <nav class="links">
+      <a href="#categorias">Categorías</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#por-que">Por qué comprarnos</a>
+      <a href="#devoluciones">Devoluciones</a>
+      <a href="#preguntas">Preguntas</a>
+    </nav>
+    <a class="btn" target="_blank"
+       href="https://wa.me/573241482071?text=Hola%20Nenechi%2C%20quiero%20saber%20m%C3%A1s%20de%20sus%20productos">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Zm4-5.4c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.9-.3-1.7-1-.6-.6-1-1.3-1.1-1.5-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 3.9 3.4.5.2.9.3 1.3.4.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1Z"/></svg>
+      Escríbenos
+    </a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> +X AÑOS DE EXPERIENCIA · PRESENCIA EN TODO EL PAÍS</div>
+      <h1>Todo lo que tu casa necesita, con la <span class="hl">seguridad de que sí llega.</span></h1>
+      <p class="lead">Hogar, gadgets y accesorios seleccionados uno por uno. Antes de comprar, hablas directo con nosotros por WhatsApp: sin bots, sin letra pequeña, sin adivinar.</p>
+      <div class="hero-ctas">
+        <a class="btn" data-wa-gate
+           href="https://wa.me/573241482071?text=Hola%20Nenechi%2C%20quiero%20hacer%20un%20pedido">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Zm4-5.4c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.9-.3-1.7-1-.6-.6-1-1.3-1.1-1.5-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 3.9 3.4.5.2.9.3 1.3.4.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1Z"/></svg>
+          Hacer mi pedido por WhatsApp
+        </a>
+        <span class="sub">Respuesta directa · sin filas de espera</span>
+      </div>
+    </div>
+
+    <div class="ticket-wrap">
+      <div class="ticket">
+        <div class="ticket-top">
+          <div class="ticket-stamp"><img src="assets/logo.png" alt=""></div>
+          <div class="ticket-id mono">GUÍA DE ENVÍO<br>#NN-04127</div>
+        </div>
+
+        <div class="ticket-route">
+          <span class="route-city">BODEGA</span>
+          <div class="route-line"><div class="route-dot"></div></div>
+          <span class="route-city">TU CASA</span>
+        </div>
+
+        <hr class="ticket-divider">
+
+        <div class="ticket-rows mono">
+          <div class="ticket-row"><span>Cobertura</span><span>Nacional</span></div>
+          <div class="ticket-row"><span>Atención</span><span>Por WhatsApp</span></div>
+          <div class="ticket-row"><span>Confirmación</span><span>Directa contigo</span></div>
+        </div>
+
+        <div class="ticket-status"><span class="dot"></span> En expansión a nuevas ciudades</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST BADGES ============ -->
+<section class="badges-section">
+  <div class="wrap">
+    <div class="badges-grid">
+      <div class="badge-item reveal">
+        <div class="badge-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <span>100% Seguro</span>
+      </div>
+      <div class="badge-item reveal">
+        <div class="badge-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="14" height="11" rx="2"/><path d="M16 10h3.5L22 13.5V18h-6"/><circle cx="7" cy="18.5" r="1.6"/><circle cx="17.5" cy="18.5" r="1.6"/></svg>
+        </div>
+        <span>Envío seguro</span>
+      </div>
+      <div class="badge-item reveal">
+        <div class="badge-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg>
+        </div>
+        <span>Pago contraentrega</span>
+      </div>
+      <a class="badge-item reveal" href="#devoluciones">
+        <div class="badge-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 1 0 8-8"/><path d="M4 4v4h4"/></svg>
+        </div>
+        <span>Devoluciones garantizadas</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST STRIP ============ -->
+<div class="strip">
+  <div class="strip-track wrap" style="max-width:none; padding:0 24px;">
+    <span>Cobertura a nivel nacional</span>
+    <span>Atención directa por WhatsApp</span>
+    <span>Sin intermediarios</span>
+    <span>Compra acompañada de principio a fin</span>
+    <span>Cobertura a nivel nacional</span>
+    <span>Atención directa por WhatsApp</span>
+    <span>Sin intermediarios</span>
+    <span>Compra acompañada de principio a fin</span>
+  </div>
+</div>
+
+<!-- ============ CATEGORIES ============ -->
+<section id="categorias">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Encuentra lo tuyo</h2>
+      <p>Tres mundos, un mismo cuidado al elegir cada producto.</p>
+    </div>
+    <div class="cats">
+      <div class="cat-card reveal">
+        <div class="cat-icon">🏠</div>
+        <h3>Hogar</h3>
+        <p>Todo lo que hace que tu casa funcione mejor: cocina, organización y detalles del día a día.</p>
+      </div>
+      <div class="cat-card reveal">
+        <div class="cat-icon">🔌</div>
+        <h3>Gadgets</h3>
+        <p>Tecnología práctica y curiosa, probada antes de llegar a nuestro catálogo.</p>
+      </div>
+      <div class="cat-card reveal">
+        <div class="cat-icon">🎒</div>
+        <h3>Moda y accesorios</h3>
+        <p>Morrales y piezas para llevar contigo, pensados para el uso real de cada día.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CATALOG ============ -->
+<section id="catalogo">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Catálogo destacado</h2>
+      <p>Estos son productos de ejemplo — reemplázalos por tus fotos y precios reales cuando estés listo.</p>
+    </div>
+
+    <div class="catalog-grid">
+
+      <div class="product-card reveal">
+        <div class="product-ph">🏠</div>
+        <div class="product-body">
+          <span class="product-tag">Hogar</span>
+          <h3>Nombre del producto</h3>
+          <span class="price">$ 00.000</span>
+          <a class="product-btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%2C%20me%20interesa%20este%20producto%20de%20Hogar">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
+            Preguntar por este
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="product-ph">🔌</div>
+        <div class="product-body">
+          <span class="product-tag">Gadgets</span>
+          <h3>Nombre del producto</h3>
+          <span class="price">$ 00.000</span>
+          <a class="product-btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%2C%20me%20interesa%20este%20producto%20de%20Gadgets">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
+            Preguntar por este
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="product-ph">🎒</div>
+        <div class="product-body">
+          <span class="product-tag">Moda</span>
+          <h3>Nombre del producto</h3>
+          <span class="price">$ 00.000</span>
+          <a class="product-btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%2C%20me%20interesa%20este%20producto%20de%20Moda">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
+            Preguntar por este
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="product-ph">🏠</div>
+        <div class="product-body">
+          <span class="product-tag">Hogar</span>
+          <h3>Nombre del producto</h3>
+          <span class="price">$ 00.000</span>
+          <a class="product-btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%2C%20me%20interesa%20este%20producto%20de%20Hogar">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
+            Preguntar por este
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="product-ph">🔌</div>
+        <div class="product-body">
+          <span class="product-tag">Gadgets</span>
+          <h3>Nombre del producto</h3>
+          <span class="price">$ 00.000</span>
+          <a class="product-btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%2C%20me%20interesa%20este%20producto%20de%20Gadgets">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
+            Preguntar por este
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="product-ph">🎒</div>
+        <div class="product-body">
+          <span class="product-tag">Moda</span>
+          <h3>Nombre del producto</h3>
+          <span class="price">$ 00.000</span>
+          <a class="product-btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%2C%20me%20interesa%20este%20producto%20de%20Moda">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
+            Preguntar por este
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY TRUST ============ -->
+<section class="why" id="por-que">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Por qué comprar con Nenechi</h2>
+      <p>No somos una tienda anónima. Somos las personas que te responden.</p>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-item">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z"/></svg>Hablas con una persona, no con un bot</h3>
+        <p>Escríbenos por WhatsApp y te respondemos directo, sin filas de atención automatizada.</p>
+      </div>
+      <div class="why-item">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9-9V6l9-3 9 3v6c-2 4.5-9 9-9 9Z"/></svg>Cobertura a nivel nacional</h3>
+        <p>Estamos llegando a más ciudades de Colombia cada mes, con seguimiento real de tu pedido.</p>
+      </div>
+      <div class="why-item">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>Resolvemos tus dudas antes de que pagues</h3>
+        <p>Talla, color, uso o entrega — lo aclaramos por chat antes de que confirmes tu compra.</p>
+      </div>
+      <div class="why-item">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 1 0 8-8"/><path d="M4 4v4h4"/></svg>Seguimos contigo después de la compra</h3>
+        <p>Si algo no llega bien, hablas con nosotros directamente, no con un ticket perdido en un sistema.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEVOLUCIONES ============ -->
+<!--
+  NOTA PARA EDITAR: esta sección es un borrador inicial sobre devoluciones,
+  cambios y garantía. Cuando me pases la política exacta de tu tienda,
+  reemplaza los textos de abajo (dentro de cada <p>) por tu información real.
+  Colombia tiene una normativa de protección al consumidor fuerte (Estatuto
+  del Consumidor), así que vale la pena que esta sección refleje exactamente
+  lo que tu tienda puede cumplir.
+-->
+<section class="returns" id="devoluciones">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Cambios, devoluciones y garantía</h2>
+      <p>Compra con la tranquilidad de saber qué pasa si algo no sale como esperabas.</p>
+    </div>
+    <div class="returns-grid reveal">
+      <div class="returns-item">
+        <div class="returns-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 1 0 8-8"/><path d="M4 4v4h4"/></svg>
+        </div>
+        <h3>Derecho a retracto</h3>
+        <p>Como en toda compra por internet en Colombia, tienes derecho a retractarte de tu compra dentro de los términos que establece la ley, sin tener que dar explicaciones.</p>
+      </div>
+      <div class="returns-item">
+        <div class="returns-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+        </div>
+        <h3>Cambios sencillos</h3>
+        <p>Si el producto no es lo que esperabas (talla, color, funcionamiento), nos escribes por el mismo chat de WhatsApp donde compraste y coordinamos el cambio.</p>
+      </div>
+      <div class="returns-item">
+        <div class="returns-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <h3>Garantía legal</h3>
+        <p>Todos nuestros productos cuentan con garantía frente a fallas de fábrica, conforme a la normativa de protección al consumidor vigente en Colombia.</p>
+      </div>
+      <div class="returns-item">
+        <div class="returns-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7Z"/></svg>
+        </div>
+        <h3>Acompañamiento directo</h3>
+        <p>Todo el proceso de cambio o devolución lo gestionas hablando con nosotros por WhatsApp, sin formularios largos ni tickets perdidos.</p>
+      </div>
+    </div>
+    <p class="returns-note">¿Tienes una duda puntual sobre un cambio o devolución? Escríbenos y te explicamos el proceso paso a paso para tu caso. Puedes ver el detalle completo en nuestra <a href="legal/politica-devoluciones.html" style="color:var(--accent-deep); font-weight:700;">Política de Cambios y Devoluciones</a>.</p>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIOS ============ -->
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Lo que dicen quienes ya compraron</h2>
+      <p>Testimonios de ejemplo — reemplázalos por los de tus primeros clientes reales.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>"Escribí por WhatsApp con dudas sobre el producto y me respondieron al momento. Llegó justo como lo pedí."</p>
+        <div class="testi-name">Nombre Apellido</div>
+        <div class="testi-loc">Ciudad, Colombia</div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>"Lo que más me gustó fue poder hablar con alguien real antes de pagar. Se siente distinto a otras tiendas."</p>
+        <div class="testi-name">Nombre Apellido</div>
+        <div class="testi-loc">Ciudad, Colombia</div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p>"El envío llegó a tiempo y me avisaron cada paso. Ya voy a hacer mi segundo pedido."</p>
+        <div class="testi-name">Nombre Apellido</div>
+        <div class="testi-loc">Ciudad, Colombia</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="preguntas">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Preguntas frecuentes</h2>
+      <p>Y si tienes otra, la respondemos directo por WhatsApp.</p>
+    </div>
+    <div class="faq reveal">
+      <details open>
+        <summary>¿Cómo hago un pedido?</summary>
+        <p>Escoges el producto que te interesa y das clic en "Preguntar por este" o en el botón flotante de WhatsApp. Ahí confirmamos contigo el producto, la dirección y la forma de pago.</p>
+      </details>
+      <details>
+        <summary>¿A qué ciudades hacen envíos?</summary>
+        <p>Hacemos envíos a nivel nacional y seguimos en expansión a nuevas ciudades cada mes. Escríbenos tu ciudad y te confirmamos tiempos de entrega.</p>
+      </details>
+      <details>
+        <summary>¿Cuánto tarda en llegar mi pedido?</summary>
+        <p>El tiempo de entrega depende de tu municipio o ciudad, así que te lo confirmamos directamente por WhatsApp en el momento de la compra, una vez conocemos tu dirección exacta. Ver más en nuestra <a href="legal/politica-envios.html" style="color:var(--accent-deep); font-weight:700;">Política de Envíos</a>.</p>
+      </details>
+      <details>
+        <summary>¿Puedo cambiar o devolver un producto?</summary>
+        <p>Sí. Si algo no llega como esperabas, nos escribes por el mismo chat de WhatsApp donde hiciste tu pedido y te ayudamos con el cambio.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA BAND ============ -->
+<section style="padding-top:0;">
+  <div class="cta-band reveal">
+    <h2>¿Ya viste algo que te gustó?</h2>
+    <p>Cuéntanos qué producto te interesa y te ayudamos a elegir, resolver dudas y coordinar tu envío.</p>
+    <a class="btn" data-wa-gate href="https://wa.me/573241482071?text=Hola%20Nenechi%2C%20quiero%20hacer%20un%20pedido">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Z"/></svg>
+      Escríbenos por WhatsApp
+    </a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="brand"><img src="assets/logo.png" alt="Nenechi">Nenechi</div>
+        <p>Hogar, gadgets y accesorios con cobertura a nivel nacional. Compra directa, acompañada de principio a fin.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Explora</h4>
+          <a href="#categorias">Categorías</a>
+          <a href="#catalogo">Catálogo</a>
+          <a href="#devoluciones">Devoluciones y garantía</a>
+          <a href="#preguntas">Preguntas frecuentes</a>
+        </div>
+        <div class="foot-col">
+          <h4>Información legal</h4>
+          <a href="legal/terminos-y-condiciones.html">Términos y Condiciones</a>
+          <a href="legal/politica-privacidad.html">Política de Privacidad</a>
+          <a href="legal/tratamiento-datos.html">Tratamiento de Datos</a>
+          <a href="legal/politica-envios.html">Política de Envíos</a>
+          <a href="legal/politica-devoluciones.html">Cambios y Devoluciones</a>
+          <a href="legal/politica-garantias.html">Garantías</a>
+          <a href="legal/preguntas-frecuentes.html">Preguntas Frecuentes</a>
+        </div>
+        <div class="foot-col">
+          <h4>Contacto</h4>
+          <a target="_blank" href="https://wa.me/573241482071">WhatsApp: +57 324 148 2071</a>
+          <p>Atención directa, sin intermediarios.</p>
+          <p style="margin-top:4px;"><span class="fill-note">Nenechi</span> — <span class="fill-note">[NIT]</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">© <span id="year"></span> Nenechi — Todos los derechos reservados.</div>
+  </div>
+</footer>
+
+<!-- ============ AVISO PREVIO A LA COMPRA (obligatorio) ============ -->
+<div class="wa-modal-overlay" id="waModal">
+  <div class="wa-modal">
+    <button class="wa-modal-close" id="waModalClose" aria-label="Cerrar">✕</button>
+    <h3>Antes de continuar a WhatsApp</h3>
+    <ul class="wa-modal-list">
+      <li>El <strong>tiempo estimado de entrega</strong> se confirma según tu municipio en el momento de la compra.</li>
+      <li>El <strong>costo de envío</strong> y el valor total del pedido se confirman por chat antes de que pagues.</li>
+      <li>La disponibilidad del producto está sujeta a confirmación al momento de tu pedido.</li>
+    </ul>
+    <label class="wa-modal-check">
+      <input type="checkbox" id="waModalCheckbox">
+      He leído y acepto los
+      <a href="legal/terminos-y-condiciones.html" target="_blank">Términos y Condiciones</a>,
+      la <a href="legal/politica-envios.html" target="_blank">Política de Envíos</a> y la
+      <a href="legal/politica-devoluciones.html" target="_blank">Política de Cambios y Devoluciones</a>.
+    </label>
+    <button class="btn wa-modal-continue" id="waModalContinue" disabled>Continuar a WhatsApp</button>
+  </div>
+</div>
+
+<!-- ============ FLOATING WHATSAPP ============ -->
+<a class="float-wa" data-wa-gate href="https://wa.me/573241482071?text=Hola%20Nenechi%2C%20quiero%20hacer%20un%20pedido">
+  <span class="ring"></span>
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Zm4-5.4c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.9-.3-1.7-1-.6-.6-1-1.3-1.1-1.5-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 3.9 3.4.5.2.9.3 1.3.4.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1Z"/></svg>
+</a>
+
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // scroll reveal
+  const items = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.15});
+  items.forEach(i=>io.observe(i));
+
+  // aviso obligatorio antes de ir a WhatsApp
+  const waModal = document.getElementById('waModal');
+  const waCheckbox = document.getElementById('waModalCheckbox');
+  const waContinue = document.getElementById('waModalContinue');
+  const waClose = document.getElementById('waModalClose');
+  let pendingWaUrl = null;
+
+  document.querySelectorAll('[data-wa-gate]').forEach(function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      pendingWaUrl = link.getAttribute('href');
+      waCheckbox.checked = false;
+      waContinue.disabled = true;
+      waModal.classList.add('open');
+    });
+  });
+
+  waCheckbox.addEventListener('change', function(){
+    waContinue.disabled = !waCheckbox.checked;
+  });
+
+  waContinue.addEventListener('click', function(){
+    if(pendingWaUrl && !waContinue.disabled){
+      window.open(pendingWaUrl, '_blank');
+      waModal.classList.remove('open');
+    }
+  });
+
+  waClose.addEventListener('click', function(){ waModal.classList.remove('open'); });
+  waModal.addEventListener('click', function(e){
+    if(e.target === waModal){ waModal.classList.remove('open'); }
+  });
+</script>
+
+</body>
+</html>
