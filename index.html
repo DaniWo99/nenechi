@@ -30,6 +30,22 @@
      <div class="product-card"> hasta su </div> de cierre (el que
      le corresponde, el 3er </div> contando desde el inicio del bloque).
 
+  2.1 DESCUENTOS (opcional):
+     Por defecto el precio es así (sin descuento):
+       <span class="price">$ 00.000</span>
+
+     Para ponerle descuento a un producto, cámbialo por:
+       <span class="price"><span class="price-old">$ 120.000</span><span class="price-now">$ 96.000</span></span>
+     (price-old = precio anterior tachado, price-now = precio con descuento)
+
+     Y agrega la etiqueta de porcentaje justo dentro de product-media,
+     antes de los media-item:
+       <span class="discount-badge">-20%</span>
+
+     Para QUITAR el descuento de un producto, borra el
+     <span class="discount-badge">...</span> y deja el precio como
+     un solo <span class="price">$ 00.000</span> normal otra vez.
+
   3. FOTOS Y VIDEOS DE UN PRODUCTO (galería):
      Dentro de cada producto hay un bloque así:
 
@@ -241,13 +257,14 @@
 
       <div class="product-card reveal" tabindex="0" role="button" aria-haspopup="dialog">
         <div class="product-media">
+          <span class="discount-badge">-20%</span>
           <div class="media-item"><div class="product-ph">🏠</div></div>
           <div class="media-item"><div class="product-ph">🛋️</div></div>
         </div>
         <div class="product-body">
           <span class="product-tag">Hogar</span>
           <h3>Nombre del producto</h3>
-          <span class="price">$ 00.000</span>
+          <span class="price"><span class="price-old">$ 120.000</span><span class="price-now">$ 96.000</span></span>
           <p class="product-desc-hidden">Descripción breve del producto: material, tamaño, para qué sirve y qué incluye. Este texto se ve completo dentro de la ficha del producto.</p>
           <span class="product-view-hint">Ver detalles <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
@@ -672,7 +689,7 @@
 
     productModalTag.textContent = tag;
     productModalTitle.textContent = title;
-    productModalPrice.textContent = price;
+    productModalPrice.innerHTML = card.querySelector('.price').innerHTML;
     productModalDesc.textContent = descEl ? descEl.textContent.trim() : '';
 
     const waMessage = 'Hola, me interesa este producto: ' + title;
