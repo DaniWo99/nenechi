@@ -3,12 +3,18 @@
     "id": "p1",
     "name": "Nombre del producto",
     "tag": "Hogar",
-    "price": "96000",
+    "price": "10",
     "oldPrice": "120000",
     "desc": "Descripcion breve del producto: material, tamano, para que sirve y que incluye. Este texto se ve completo dentro de la ficha del producto.",
     "media": [
-      {"type": "emoji", "content": "🏠"},
-      {"type": "emoji", "content": "🛋️"}
+      {
+        "type": "emoji",
+        "content": "🏠"
+      },
+      {
+        "type": "emoji",
+        "content": "🛋️"
+      }
     ],
     "hidden": false
   },
@@ -20,7 +26,10 @@
     "oldPrice": "",
     "desc": "Descripcion breve del producto: material, tamano, para que sirve y que incluye.",
     "media": [
-      {"type": "emoji", "content": "🔌"}
+      {
+        "type": "emoji",
+        "content": "🔌"
+      }
     ],
     "hidden": false
   },
@@ -32,7 +41,10 @@
     "oldPrice": "",
     "desc": "Descripcion breve del producto: material, tamano, para que sirve y que incluye.",
     "media": [
-      {"type": "emoji", "content": "🎒"}
+      {
+        "type": "emoji",
+        "content": "🎒"
+      }
     ],
     "hidden": false
   },
@@ -44,7 +56,10 @@
     "oldPrice": "",
     "desc": "Descripcion breve del producto: material, tamano, para que sirve y que incluye.",
     "media": [
-      {"type": "emoji", "content": "🏠"}
+      {
+        "type": "emoji",
+        "content": "🏠"
+      }
     ],
     "hidden": false
   },
@@ -56,7 +71,10 @@
     "oldPrice": "",
     "desc": "Descripcion breve del producto: material, tamano, para que sirve y que incluye.",
     "media": [
-      {"type": "emoji", "content": "🔌"}
+      {
+        "type": "emoji",
+        "content": "🔌"
+      }
     ],
     "hidden": false
   },
@@ -68,7 +86,10 @@
     "oldPrice": "",
     "desc": "Descripcion breve del producto: material, tamano, para que sirve y que incluye.",
     "media": [
-      {"type": "emoji", "content": "🎒"}
+      {
+        "type": "emoji",
+        "content": "🎒"
+      }
     ],
     "hidden": false
   }
