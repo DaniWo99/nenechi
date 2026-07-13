@@ -347,8 +347,8 @@ body.discount-active .buybar-countdown{ display:block; }
 @keyframes wheelFadeIn{ from{opacity:0;} to{opacity:1;} }
 
 .wheel-modal{
-  position:relative; background:var(--surface); border-radius:26px; max-width:380px; width:100%;
-  padding:30px 26px 30px; text-align:center; box-shadow:0 40px 90px -20px rgba(24,21,31,0.45);
+  position:relative; background:var(--surface); border-radius:26px; max-width:400px; width:100%;
+  padding:30px 24px 30px; text-align:center; box-shadow:0 40px 90px -20px rgba(24,21,31,0.45);
   animation:wheelPopIn .4s cubic-bezier(.2,.8,.3,1.3);
 }
 @keyframes wheelPopIn{ from{opacity:0; transform:scale(.9) translateY(14px);} to{opacity:1; transform:none;} }
@@ -360,7 +360,7 @@ body.discount-active .buybar-countdown{ display:block; }
 .wheel-stage h3{ font-size:1.3rem; margin-bottom:8px; }
 .wheel-stage > p{ color:var(--ink-soft); font-size:0.88rem; margin-bottom:22px; }
 
-.wheel-wrap{ position:relative; width:250px; height:250px; margin:0 auto 24px; }
+.wheel-wrap{ position:relative; width:min(310px, 76vw); aspect-ratio:1/1; margin:0 auto 18px; }
 .wheel-pointer{
   position:absolute; top:-8px; left:50%; transform:translateX(-50%); z-index:5;
   width:0; height:0; border-left:13px solid transparent; border-right:13px solid transparent;
@@ -374,24 +374,44 @@ body.discount-active .buybar-countdown{ display:block; }
 .wheel{
   width:100%; height:100%; border-radius:50%; position:relative; z-index:1;
   border:6px solid var(--surface); box-shadow:0 0 0 3px var(--line), 0 22px 44px -18px rgba(24,21,31,0.4);
-  transition:transform 3.8s cubic-bezier(.14,.7,.11,1);
+  will-change:transform;
 }
 .wheel.spinning{ box-shadow:0 0 0 3px var(--accent), 0 22px 60px -14px rgba(94,23,235,0.55); }
 .wheel-hub{
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:44px; height:44px;
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:48px; height:48px;
   border-radius:50%; background:var(--surface); border:3px solid var(--accent); z-index:3;
-  display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+  display:flex; align-items:center; justify-content:center; font-size:1.3rem;
 }
 .wheel-label{
-  position:absolute; top:50%; left:50%; width:0; height:0; font-size:0.62rem; font-weight:800;
-  line-height:1.15; white-space:nowrap; text-align:center;
+  position:absolute; top:50%; left:50%; width:0; height:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0;
+  font-size:0.76rem; font-weight:800; line-height:1.12; white-space:nowrap; text-align:center;
 }
-.wheel-label span{ display:inline-block; transform:translateX(-50%); }
-.wheel-label.prize{ font-size:0.72rem; }
+.wheel-label span{ display:block; }
+.wheel-label.prize{ font-size:0.82rem; }
 
-.wheel-spin-btn{ margin-bottom:10px; position:relative; overflow:hidden; }
+.wheel-hint{
+  position:absolute; left:50%; top:-26px;
+  transform:translateX(-50%); font-size:1.8rem; line-height:1;
+  opacity:0; pointer-events:none; z-index:8;
+  transition:opacity .25s ease;
+}
+.wheel-hint.show{ opacity:1; animation:handPoint 0.9s ease-in-out infinite; }
+@keyframes handPoint{
+  0%,100%{ transform:translateX(-50%) translateY(0);}
+  50%{ transform:translateX(-50%) translateY(6px);}
+}
+
+.wheel-btn-area{ position:relative; margin-bottom:10px; }
+.wheel-spin-btn{ position:relative; overflow:hidden; margin-bottom:0; }
 .wheel-spin-btn:disabled{ background:var(--line); color:var(--ink-soft); cursor:not-allowed; box-shadow:none; }
 .wheel-spin-btn:disabled:hover{ background:var(--line); transform:none; }
+.wheel-spin-btn.glow{ animation:btnGlow 1.1s ease-in-out infinite; }
+@keyframes btnGlow{
+  0%,100%{ box-shadow:0 16px 32px -14px rgba(94,23,235,0.55); transform:scale(1); }
+  50%{ box-shadow:0 16px 40px -6px rgba(94,23,235,0.95), 0 0 0 7px rgba(139,92,246,0.32); transform:scale(1.03); }
+}
+.wheel-attempts-wrap{ position:relative; }
 .wheel-attempts{ font-size:0.82rem; color:var(--ink-soft); min-height:1.2em; }
 .wheel-attempts.bounce{ animation:attemptBounce .5s ease; }
 @keyframes attemptBounce{ 0%{transform:scale(1);} 40%{transform:scale(1.12);} 100%{transform:scale(1);} }
@@ -419,12 +439,10 @@ body.discount-active .buybar-countdown{ display:block; }
   100%{ transform:translateY(340px) rotate(560deg); opacity:0; }
 }
 @media (prefers-reduced-motion:reduce){
-  .wheel{ transition:transform .6s linear; }
-  .confetti-piece, .wheel-result .prize-icon, .wheel-price-anim .new, .wheel-overlay.open, .wheel-modal{ animation:none !important; }
+  .confetti-piece, .wheel-result .prize-icon, .wheel-price-anim .new, .wheel-overlay.open, .wheel-modal, .wheel-spin-btn.glow, .wheel-hint.show{ animation:none !important; }
 }
 @media (max-width:400px){
-  .wheel-wrap{ width:220px; height:220px; }
-  .wheel-modal{ padding:26px 20px 26px; }
+  .wheel-modal{ padding:24px 18px 24px; }
 }
 
 /* ---------- AJUSTES MOVIL ---------- */
@@ -729,8 +747,13 @@ body.discount-active .buybar-countdown{ display:block; }
         </div>
       </div>
 
-      <button class="btn block wheel-spin-btn" id="wheelSpinBtn">Girar la ruleta</button>
-      <p class="wheel-attempts" id="wheelAttempts">Tienes 2 intentos</p>
+      <div class="wheel-btn-area">
+        <button class="btn block wheel-spin-btn" id="wheelSpinBtn">Parar</button>
+      </div>
+      <div class="wheel-attempts-wrap">
+        <div class="wheel-hint" id="wheelHint">👆</div>
+        <p class="wheel-attempts" id="wheelAttempts">Tienes 2 intentos</p>
+      </div>
     </div>
 
     <div class="wheel-result" id="wheelResult">
@@ -949,16 +972,13 @@ function initOffer(){
   }
 }
 
-// ---------- RULETA: SEGMENTOS ----------
+// ---------- RULETA: SEGMENTOS (5, con texto corto en varias lineas) ----------
 const segments = [
-  { label:'5% OFF',            color:'#8B5CF6', type:'deco' },
-  { label:'Sigue intentando',  color:'#F1ECFB', type:'lose', darkText:true },
-  { label:'10% OFF',           color:'#5E17EB', type:'deco' },
-  { label:'🎁 Premio sorpresa', color:'#F4B400', type:'grand' },
-  { label:'15% OFF',           color:'#8B5CF6', type:'deco' },
-  { label:'Otro intento 🔄',    color:'#3D6DF2', type:'second' },
-  { label:'20% OFF',           color:'#5E17EB', type:'deco' },
-  { label:'Sigue intentando',  color:'#F1ECFB', type:'lose', darkText:true }
+  { lines:['10%','OFF'],                 color:'#8B5CF6', type:'deco' },
+  { lines:['1 INTENTO','MÁS'],           color:'#3D6DF2', type:'second' },
+  { lines:['15%','OFF'],                 color:'#5E17EB', type:'deco' },
+  { lines:['PREMIO','SORPRESA','🎁'],    color:'#F4B400', type:'grand', darkText:true },
+  { lines:['20%','OFF'],                 color:'#8B5CF6', type:'deco' }
 ];
 const SEGMENT_ANGLE = 360 / segments.length;
 const secondChanceIndex = segments.findIndex(function(s){ return s.type === 'second'; });
@@ -968,6 +988,7 @@ const wheelEl = document.getElementById('wheel');
 const wheelOverlay = document.getElementById('wheelOverlay');
 const wheelSpinBtn = document.getElementById('wheelSpinBtn');
 const wheelAttemptsEl = document.getElementById('wheelAttempts');
+const wheelHintEl = document.getElementById('wheelHint');
 const wheelStageEl = document.getElementById('wheelStage');
 const wheelResultEl = document.getElementById('wheelResult');
 const wheelResultTitle = document.getElementById('wheelResultTitle');
@@ -980,21 +1001,80 @@ const gradientParts = segments.map(function(seg, i){
 });
 wheelEl.style.background = 'conic-gradient(from 0deg, ' + gradientParts.join(', ') + ')';
 
-// pintar las etiquetas de cada segmento
-segments.forEach(function(seg, i){
-  const mid = i * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
-  const label = document.createElement('div');
-  label.className = 'wheel-label' + (seg.type === 'grand' ? ' prize' : '');
-  label.style.transform = 'rotate(' + mid + 'deg) translate(0,-88px)';
-  label.style.color = seg.darkText ? 'var(--accent-deep)' : '#fff';
-  label.innerHTML = '<span>' + seg.label + '</span>';
-  wheelEl.appendChild(label);
+// pintar las etiquetas de cada segmento (radio calculado segun el tamano real de la rueda)
+function buildWheelLabels(){
+  wheelEl.querySelectorAll('.wheel-label').forEach(function(el){ el.remove(); });
+  const radius = wheelEl.getBoundingClientRect().width / 2 * 0.6;
+  segments.forEach(function(seg, i){
+    const mid = i * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
+    const label = document.createElement('div');
+    label.className = 'wheel-label' + (seg.type === 'grand' ? ' prize' : '');
+    label.style.transform = 'rotate(' + mid + 'deg) translate(0,-' + radius + 'px)';
+    label.style.color = seg.darkText ? 'var(--accent-deep)' : '#fff';
+    label.innerHTML = seg.lines.map(function(line){ return '<span>' + line + '</span>'; }).join('');
+    wheelEl.appendChild(label);
+  });
+}
+buildWheelLabels();
+let resizeT = null;
+window.addEventListener('resize', function(){
+  clearTimeout(resizeT);
+  resizeT = setTimeout(buildWheelLabels, 200);
 });
 
 let currentRotation = 0;
 let attemptsLeft = 2;
 let spinning = false;
 
+// ---------- GIRO CONTINUO (idle) mientras se espera que el usuario presione ----------
+let idleSpinning = false;
+let idleFrame = null;
+let idleBaseRotation = 0;
+let idleStartTime = 0;
+let idleSpeed = 0;
+const IDLE_SPEED_FAST = 480;   // grados por segundo — al entrar / durante el 1er intento
+const IDLE_SPEED_NORMAL = 95;  // grados por segundo — modo normal, 2do intento
+
+function startIdleSpin(speed){
+  idleSpinning = true;
+  idleSpeed = speed || IDLE_SPEED_NORMAL;
+  idleBaseRotation = currentRotation;
+  idleStartTime = performance.now();
+  wheelEl.style.transition = 'none';
+  function frame(now){
+    if(!idleSpinning) return;
+    const elapsed = (now - idleStartTime) / 1000;
+    currentRotation = idleBaseRotation + elapsed * idleSpeed;
+    wheelEl.style.transform = 'rotate(' + currentRotation + 'deg)';
+    idleFrame = requestAnimationFrame(frame);
+  }
+  idleFrame = requestAnimationFrame(frame);
+}
+
+function stopIdleSpin(){
+  if(!idleSpinning) return;
+  idleSpinning = false;
+  if(idleFrame) cancelAnimationFrame(idleFrame);
+  const elapsed = (performance.now() - idleStartTime) / 1000;
+  currentRotation = idleBaseRotation + elapsed * idleSpeed;
+  wheelEl.style.transition = 'none';
+  wheelEl.style.transform = 'rotate(' + currentRotation + 'deg)';
+}
+
+// primer intento: la ruleta ya viene girando rapido, al presionar "Parar" simplemente
+// termina la vuelta en curso y frena ahi (sin vueltas extra ni efecto de "arranque")
+function stopFastSpin(segmentIndex){
+  const targetMid = segmentIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
+  const desiredMod = ((360 - targetMid) % 360 + 360) % 360;
+  const currentMod = ((currentRotation % 360) + 360) % 360;
+  let delta = desiredMod - currentMod;
+  if(delta <= 0) delta += 360;
+  currentRotation = currentRotation + delta;
+  wheelEl.style.transition = 'transform 1.1s cubic-bezier(.15,.7,.24,1)';
+  wheelEl.style.transform = 'rotate(' + currentRotation + 'deg)';
+}
+
+// segundo intento: giro dramatico con vueltas extra, como una ruleta normal
 function spinTo(segmentIndex, extraSpins){
   const targetMid = segmentIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
   const desiredMod = ((360 - targetMid) % 360 + 360) % 360;
@@ -1002,6 +1082,7 @@ function spinTo(segmentIndex, extraSpins){
   let delta = desiredMod - currentMod;
   if(delta <= 0) delta += 360;
   currentRotation = currentRotation + extraSpins * 360 + delta;
+  wheelEl.style.transition = 'transform 3.4s cubic-bezier(.14,.7,.11,1)';
   wheelEl.style.transform = 'rotate(' + currentRotation + 'deg)';
 }
 
@@ -1027,10 +1108,13 @@ function handleSpinResult(targetIndex){
   attemptsLeft -= 1;
 
   if(targetIndex === secondChanceIndex){
-    wheelAttemptsEl.textContent = '¡Ganaste otro intento! Gira una vez más para tu Premio Sorpresa 🎯';
+    wheelAttemptsEl.textContent = '¡Ganaste otro giro! 🎯';
     wheelAttemptsEl.classList.remove('bounce'); void wheelAttemptsEl.offsetWidth; wheelAttemptsEl.classList.add('bounce');
-    wheelSpinBtn.textContent = 'Girar de nuevo';
+    wheelSpinBtn.textContent = 'Intenta por última vez';
     wheelSpinBtn.disabled = false;
+    wheelSpinBtn.classList.add('glow');
+    wheelHintEl.classList.add('show');
+    startIdleSpin(IDLE_SPEED_NORMAL); // modo normal: gira despacio mientras el usuario decide presionar de nuevo
   } else if(targetIndex === grandPrizeIndex){
     wheelResultTitle.textContent = '¡Felicidades!';
     wheelResultText.innerHTML = 'Ganaste el <strong>Premio Sorpresa</strong>: -36% OFF en tu Bolso Crossbody Antirrobo';
@@ -1045,12 +1129,23 @@ wheelSpinBtn.addEventListener('click', function(){
   spinning = true;
   wheelEl.classList.add('spinning');
   wheelSpinBtn.disabled = true;
+  wheelSpinBtn.classList.remove('glow');
+  wheelHintEl.classList.remove('show');
 
-  // primer giro: siempre cae en "otro intento". segundo giro (ultimo): siempre cae en el premio sorpresa.
+  stopIdleSpin();
+
+  // primer intento: la ruleta ya iba rapido, "Parar" solo la frena en "1 intento mas".
+  // segundo intento ("Intenta por ultima vez"): giro dramatico que cae en el premio sorpresa.
   const isFinalAttempt = attemptsLeft === 1;
   const targetIndex = isFinalAttempt ? grandPrizeIndex : secondChanceIndex;
 
-  spinTo(targetIndex, 5);
+  requestAnimationFrame(function(){
+    if(isFinalAttempt){
+      spinTo(targetIndex, 5);
+    } else {
+      stopFastSpin(targetIndex);
+    }
+  });
 
   function onTransitionEnd(e){
     if(e.propertyName !== 'transform') return;
@@ -1060,23 +1155,40 @@ wheelSpinBtn.addEventListener('click', function(){
   wheelEl.addEventListener('transitionend', onTransitionEnd);
 });
 
+function resetWheelState(){
+  attemptsLeft = 2;
+  spinning = false;
+  wheelEl.classList.remove('spinning');
+  wheelStageEl.style.display = '';
+  wheelResultEl.classList.remove('show');
+  wheelSpinBtn.disabled = false;
+  wheelSpinBtn.textContent = 'Parar';
+  wheelSpinBtn.classList.remove('glow');
+  wheelHintEl.classList.remove('show');
+  wheelAttemptsEl.textContent = 'Tienes 2 intentos';
+}
+
 function openWheel(){
+  resetWheelState();
   wheelOverlay.classList.add('open');
+  buildWheelLabels(); // el modal ya es visible aqui, así el radio se calcula con el ancho real (antes medía 0px)
+  startIdleSpin(IDLE_SPEED_FAST);
 }
 function closeWheelOverlay(){
+  // el descuento se aplica siempre al cerrar la ruleta (X, clic afuera, Escape
+  // o el boton "Ver mi descuento"), sin importar si ya jugo o cierra antes de girar
+  const expiry = Date.now() + OFFER_MS;
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify({ expiry: expiry })); }catch(e){}
+  activateDiscount(expiry, true);
   wheelOverlay.classList.remove('open');
+  stopIdleSpin();
 }
 
 document.getElementById('wheelClose').addEventListener('click', closeWheelOverlay);
 wheelOverlay.addEventListener('click', function(e){ if(e.target === wheelOverlay){ closeWheelOverlay(); } });
 document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeWheelOverlay(); } });
 
-document.getElementById('wheelClaim').addEventListener('click', function(){
-  const expiry = Date.now() + OFFER_MS;
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify({ expiry: expiry })); }catch(e){}
-  closeWheelOverlay();
-  activateDiscount(expiry, true);
-});
+document.getElementById('wheelClaim').addEventListener('click', closeWheelOverlay);
 
 const reopenInlineBtn = document.getElementById('reopenWheelBtnInline');
 if(reopenInlineBtn) reopenInlineBtn.addEventListener('click', openWheel);
