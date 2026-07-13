@@ -141,7 +141,9 @@ html[data-theme="dark"] .theme-toggle .icon-moon{display:block;}
   position:absolute; top:14px; left:14px; z-index:3; background:var(--accent); color:#fff;
   font-family:'JetBrains Mono', monospace; font-size:0.76rem; font-weight:700;
   padding:6px 12px; border-radius:999px; box-shadow:0 8px 18px -8px rgba(94,23,235,0.55);
+  display:none;
 }
+body.discount-active .discount-badge{ display:inline-block; }
 .gallery-nav{
   position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%;
   border:none; background:rgba(255,255,255,0.92); color:var(--ink); display:flex; align-items:center;
@@ -187,19 +189,29 @@ h1.product-title{ font-size:clamp(1.5rem, 2.6vw, 2rem); margin-bottom:16px; }
 .price-block{
   display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:8px;
 }
-.price-old{ font-family:'JetBrains Mono', monospace; text-decoration:line-through; color:var(--ink-soft); font-size:1.05rem; }
-.price-now{ font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--accent-deep); font-size:2.1rem; }
+.price-old{ font-family:'JetBrains Mono', monospace; text-decoration:line-through; color:var(--ink-soft); font-size:1.05rem; display:none; }
+.price-now{ font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--ink); font-size:2.1rem; transition:color .3s ease; }
 .price-off{
   background:var(--paper-2); color:var(--accent-deep); font-family:'JetBrains Mono', monospace;
   font-size:0.82rem; font-weight:700; padding:5px 10px; border-radius:8px; border:1px solid var(--line);
+  display:none;
 }
+body.discount-active .price-old{ display:inline; }
+body.discount-active .price-off{ display:inline-block; }
+body.discount-active .price-now{ color:var(--price-green); }
 .price-note{ font-size:0.85rem; color:var(--ink-soft); margin-bottom:22px; }
 
 .urgency{
   display:inline-flex; align-items:center; gap:8px; background:var(--paper-2); color:var(--accent-deep);
   font-size:0.82rem; font-weight:700; padding:8px 14px; border-radius:12px; margin-bottom:24px;
+  flex-wrap:wrap;
 }
 .urgency .dot{ width:7px;height:7px;border-radius:50%; background:var(--accent); animation:pulse 2s infinite; flex-shrink:0; }
+.urgency .timer{ font-family:'JetBrains Mono', monospace; font-weight:800; }
+.urgency-link{
+  background:none; border:none; color:inherit; font-weight:800; text-decoration:underline;
+  cursor:pointer; font-size:inherit; font-family:inherit; padding:0;
+}
 @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.35;} }
 
 .swatches{ margin-bottom:26px; }
@@ -301,8 +313,12 @@ footer{ padding:44px 0 32px; border-top:1px solid var(--line); }
   padding:12px 16px; display:flex; align-items:center; gap:14px;
 }
 .buybar-price{ display:flex; flex-direction:column; line-height:1.2; flex-shrink:0; }
-.buybar-price .old{ font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:var(--ink-soft); text-decoration:line-through; }
-.buybar-price .now{ font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--accent-deep); font-size:1.15rem; }
+.buybar-price .old{ font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:var(--ink-soft); text-decoration:line-through; display:none; }
+.buybar-price .now{ font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--ink); font-size:1.15rem; transition:color .3s ease; }
+.buybar-countdown{ font-family:'JetBrains Mono', monospace; font-size:0.62rem; font-weight:700; color:var(--price-green); display:none; }
+body.discount-active .buybar-price .old{ display:block; }
+body.discount-active .buybar-price .now{ color:var(--price-green); }
+body.discount-active .buybar-countdown{ display:block; }
 .buybar .btn{ flex:1; }
 @media (min-width:941px){ .buybar{ display:none; } }
 @media (max-width:940px){ body{ padding-bottom:82px; } }
@@ -321,6 +337,95 @@ footer{ padding:44px 0 32px; border-top:1px solid var(--line); }
 @keyframes ring{ 0%{transform:scale(1); opacity:0.6;} 100%{transform:scale(1.6); opacity:0;} }
 @media (prefers-reduced-motion:reduce){ .float-wa .ring{ animation:none; } }
 @media (max-width:940px){ .float-wa{ display:none; } }
+
+/* ---------- RULETA DE BIENVENIDA ---------- */
+.wheel-overlay{
+  position:fixed; inset:0; z-index:200; background:rgba(24,21,31,0.62); backdrop-filter:blur(4px);
+  display:none; align-items:center; justify-content:center; padding:20px;
+}
+.wheel-overlay.open{ display:flex; animation:wheelFadeIn .35s ease; }
+@keyframes wheelFadeIn{ from{opacity:0;} to{opacity:1;} }
+
+.wheel-modal{
+  position:relative; background:var(--surface); border-radius:26px; max-width:380px; width:100%;
+  padding:30px 26px 30px; text-align:center; box-shadow:0 40px 90px -20px rgba(24,21,31,0.45);
+  animation:wheelPopIn .4s cubic-bezier(.2,.8,.3,1.3);
+}
+@keyframes wheelPopIn{ from{opacity:0; transform:scale(.9) translateY(14px);} to{opacity:1; transform:none;} }
+
+.wheel-close{
+  position:absolute; top:16px; right:16px; background:none; border:none; font-size:1.2rem;
+  color:var(--ink-soft); cursor:pointer; line-height:1; z-index:6;
+}
+.wheel-stage h3{ font-size:1.3rem; margin-bottom:8px; }
+.wheel-stage > p{ color:var(--ink-soft); font-size:0.88rem; margin-bottom:22px; }
+
+.wheel-wrap{ position:relative; width:250px; height:250px; margin:0 auto 24px; }
+.wheel-pointer{
+  position:absolute; top:-8px; left:50%; transform:translateX(-50%); z-index:5;
+  width:0; height:0; border-left:13px solid transparent; border-right:13px solid transparent;
+  border-top:22px solid var(--accent-deep); filter:drop-shadow(0 3px 4px rgba(24,21,31,0.25));
+}
+.wheel-glow{
+  position:absolute; inset:-14px; border-radius:50%;
+  background:radial-gradient(circle, rgba(139,92,246,0.35), transparent 70%);
+  z-index:0; pointer-events:none;
+}
+.wheel{
+  width:100%; height:100%; border-radius:50%; position:relative; z-index:1;
+  border:6px solid var(--surface); box-shadow:0 0 0 3px var(--line), 0 22px 44px -18px rgba(24,21,31,0.4);
+  transition:transform 3.8s cubic-bezier(.14,.7,.11,1);
+}
+.wheel.spinning{ box-shadow:0 0 0 3px var(--accent), 0 22px 60px -14px rgba(94,23,235,0.55); }
+.wheel-hub{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:44px; height:44px;
+  border-radius:50%; background:var(--surface); border:3px solid var(--accent); z-index:3;
+  display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+}
+.wheel-label{
+  position:absolute; top:50%; left:50%; width:0; height:0; font-size:0.62rem; font-weight:800;
+  line-height:1.15; white-space:nowrap; text-align:center;
+}
+.wheel-label span{ display:inline-block; transform:translateX(-50%); }
+.wheel-label.prize{ font-size:0.72rem; }
+
+.wheel-spin-btn{ margin-bottom:10px; position:relative; overflow:hidden; }
+.wheel-spin-btn:disabled{ background:var(--line); color:var(--ink-soft); cursor:not-allowed; box-shadow:none; }
+.wheel-spin-btn:disabled:hover{ background:var(--line); transform:none; }
+.wheel-attempts{ font-size:0.82rem; color:var(--ink-soft); min-height:1.2em; }
+.wheel-attempts.bounce{ animation:attemptBounce .5s ease; }
+@keyframes attemptBounce{ 0%{transform:scale(1);} 40%{transform:scale(1.12);} 100%{transform:scale(1);} }
+
+.wheel-result{ display:none; position:relative; }
+.wheel-result.show{ display:block; animation:resultPop .5s cubic-bezier(.2,.8,.3,1.3); }
+@keyframes resultPop{ from{opacity:0; transform:scale(.85);} to{opacity:1; transform:none;} }
+.wheel-result .prize-icon{ font-size:2.6rem; margin-bottom:6px; animation:prizeSpin .7s ease; display:block; }
+@keyframes prizeSpin{ from{transform:rotate(-20deg) scale(.4); opacity:0;} to{transform:none; opacity:1;} }
+.wheel-result h3{ font-size:1.35rem; margin-bottom:8px; }
+.wheel-result > p{ color:var(--ink-soft); font-size:0.92rem; margin-bottom:18px; }
+.wheel-result strong{ color:var(--accent-deep); }
+.wheel-price-anim{ display:flex; align-items:baseline; justify-content:center; gap:12px; margin-bottom:24px; }
+.wheel-price-anim .old{ font-family:'JetBrains Mono', monospace; text-decoration:line-through; color:var(--ink-soft); font-size:1rem; }
+.wheel-price-anim .new{
+  font-family:'JetBrains Mono', monospace; font-weight:800; color:var(--price-green); font-size:2rem;
+  animation:priceDrop .6s ease .15s both;
+}
+@keyframes priceDrop{ 0%{transform:translateY(-10px); opacity:0;} 60%{transform:translateY(3px); opacity:1;} 100%{transform:translateY(0);} }
+
+.confetti-layer{ position:absolute; inset:-30px -26px auto; height:300px; overflow:hidden; pointer-events:none; z-index:2; }
+.confetti-piece{ position:absolute; top:-14px; width:8px; height:8px; opacity:0.95; }
+@keyframes confettiFall{
+  0%{ transform:translateY(0) rotate(0deg); opacity:1; }
+  100%{ transform:translateY(340px) rotate(560deg); opacity:0; }
+}
+@media (prefers-reduced-motion:reduce){
+  .wheel{ transition:transform .6s linear; }
+  .confetti-piece, .wheel-result .prize-icon, .wheel-price-anim .new, .wheel-overlay.open, .wheel-modal{ animation:none !important; }
+}
+@media (max-width:400px){
+  .wheel-wrap{ width:220px; height:220px; }
+  .wheel-modal{ padding:26px 20px 26px; }
+}
 
 /* ---------- AJUSTES MOVIL ---------- */
 @media (max-width:600px){
@@ -434,12 +539,12 @@ footer{ padding:44px 0 32px; border-top:1px solid var(--line); }
 
         <div class="price-block">
           <span class="price-old mono">$ 110.000</span>
-          <span class="price-now mono">$ 69.900</span>
+          <span class="price-now mono" id="priceNow">$ 110.000</span>
           <span class="price-off">-36% OFF</span>
         </div>
-        <p class="price-note">Precio de promocion por tiempo limitado. El valor final se confirma por WhatsApp antes de pagar.</p>
+        <p class="price-note" id="priceNote">Gira la ruleta de bienvenida y desbloquea un descuento exclusivo por tiempo limitado.</p>
 
-        <div class="urgency"><span class="dot"></span> Alta demanda esta semana — confirmamos disponibilidad por chat</div>
+        <div class="urgency" id="urgencyChip"><span class="dot"></span> Gira la ruleta y desbloquea tu descuento — <button type="button" class="urgency-link" id="reopenWheelBtnInline">girar ahora</button></div>
 
         <div class="swatches">
           <h4>Colores disponibles</h4>
@@ -452,9 +557,9 @@ footer{ padding:44px 0 32px; border-top:1px solid var(--line); }
         </div>
 
         <div class="cta-col">
-          <a class="btn block btn-buy" target="_blank" href="https://wa.me/573241482071?text=Hola%20Nenechi%2C%20me%20interesa%20el%20Bolso%20Crossbody%20Antirrobo">
+          <a class="btn block btn-buy" id="ctaWaBtn" target="_blank" href="https://wa.me/573241482071?text=Hola%20Nenechi%2C%20me%20interesa%20el%20Bolso%20Crossbody%20Antirrobo">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Zm4-5.4c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.9-.3-1.7-1-.6-.6-1-1.3-1.1-1.5-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 3.9 3.4.5.2.9.3 1.3.4.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1Z"/></svg>
-            Comprar ahora con -36% OFF
+            <span id="ctaBtnLabel">Comprar ahora</span>
           </a>
           <span class="cta-sub">Te lleva directo a WhatsApp · respuesta directa, sin filas de espera</span>
         </div>
@@ -598,12 +703,48 @@ footer{ padding:44px 0 32px; border-top:1px solid var(--line); }
 <div class="buybar">
   <div class="buybar-price">
     <span class="old mono">$ 110.000</span>
-    <span class="now mono">$ 69.900</span>
+    <span class="now mono" id="buybarNow">$ 110.000</span>
+    <span class="buybar-countdown" id="buybarCountdown"></span>
   </div>
-  <a class="btn btn-buy" target="_blank" href="https://wa.me/573241482071?text=Hola%20Nenechi%2C%20me%20interesa%20el%20Bolso%20Crossbody%20Antirrobo">
+  <a class="btn btn-buy" id="buybarWaBtn" target="_blank" href="https://wa.me/573241482071?text=Hola%20Nenechi%2C%20me%20interesa%20el%20Bolso%20Crossbody%20Antirrobo">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Zm4-5.4c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.9-.3-1.7-1-.6-.6-1-1.3-1.1-1.5-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 3.9 3.4.5.2.9.3 1.3.4.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1Z"/></svg>
-    Comprar -36% OFF
+    <span id="buybarBtnLabel">Comprar ahora</span>
   </a>
+</div>
+
+<!-- ============ RULETA DE BIENVENIDA ============ -->
+<div class="wheel-overlay" id="wheelOverlay">
+  <div class="wheel-modal">
+    <button class="wheel-close" id="wheelClose" aria-label="Cerrar">&#10005;</button>
+
+    <div class="wheel-stage" id="wheelStage">
+      <h3>🎡 Ruleta de bienvenida</h3>
+      <p>Gira y desbloquea un descuento exclusivo en tu Bolso Antirrobo.</p>
+
+      <div class="wheel-wrap">
+        <div class="wheel-glow"></div>
+        <span class="wheel-pointer"></span>
+        <div class="wheel" id="wheel">
+          <div class="wheel-hub">🎁</div>
+        </div>
+      </div>
+
+      <button class="btn block wheel-spin-btn" id="wheelSpinBtn">Girar la ruleta</button>
+      <p class="wheel-attempts" id="wheelAttempts">Tienes 2 intentos</p>
+    </div>
+
+    <div class="wheel-result" id="wheelResult">
+      <div class="confetti-layer" id="confettiLayer"></div>
+      <span class="prize-icon">🎉</span>
+      <h3 id="wheelResultTitle">¡Felicidades!</h3>
+      <p id="wheelResultText">Ganaste el <strong>Premio Sorpresa</strong>: -36% OFF en tu Bolso Crossbody Antirrobo</p>
+      <div class="wheel-price-anim">
+        <span class="old mono">$ 110.000</span>
+        <span class="new mono">$ 69.900</span>
+      </div>
+      <button class="btn block" id="wheelClaim">Ver mi descuento</button>
+    </div>
+  </div>
 </div>
 
 <!-- ============ FLOATING WHATSAPP ============ -->
@@ -702,8 +843,245 @@ themeToggle.addEventListener('click', function(){
   root.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
 });
 
-// ---------- ENLACES DIRECTOS A WHATSAPP ----------
-// (sin aviso previo: los botones ya llevan target="_blank" y href directo)
+// ============================================================
+// RULETA DE BIENVENIDA + OFERTA CON CUENTA REGRESIVA
+// ============================================================
+const PRICE_OLD = 110000;
+const PRICE_NEW = 69900;
+const OFFER_MS = 12 * 60 * 60 * 1000; // 12 horas
+const STORAGE_KEY = 'nenechi_bolso_wheel_offer';
+
+function formatCOP(n){ return '$ ' + Math.round(n).toLocaleString('es-CO'); }
+
+const priceNowEl = document.getElementById('priceNow');
+const buybarNowEl = document.getElementById('buybarNow');
+const priceNoteEl = document.getElementById('priceNote');
+const urgencyEl = document.getElementById('urgencyChip');
+const buybarCountdownEl = document.getElementById('buybarCountdown');
+const ctaBtnLabel = document.getElementById('ctaBtnLabel');
+const buybarBtnLabel = document.getElementById('buybarBtnLabel');
+
+let countdownTimer = null;
+
+function animatePrice(el, from, to, duration){
+  if(!el) return;
+  const start = performance.now();
+  function frame(now){
+    const t = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const val = from + (to - from) * eased;
+    el.textContent = formatCOP(val);
+    if(t < 1) requestAnimationFrame(frame);
+    else el.textContent = formatCOP(to);
+  }
+  requestAnimationFrame(frame);
+}
+
+function bindReopenLinks(){
+  document.querySelectorAll('.urgency-link[data-reopen]').forEach(function(btn){
+    btn.addEventListener('click', openWheel);
+  });
+}
+
+function activateDiscount(expiry, animate){
+  document.body.classList.add('discount-active');
+  if(animate){
+    animatePrice(priceNowEl, PRICE_OLD, PRICE_NEW, 1100);
+    animatePrice(buybarNowEl, PRICE_OLD, PRICE_NEW, 1100);
+  } else {
+    if(priceNowEl) priceNowEl.textContent = formatCOP(PRICE_NEW);
+    if(buybarNowEl) buybarNowEl.textContent = formatCOP(PRICE_NEW);
+  }
+  if(ctaBtnLabel) ctaBtnLabel.textContent = 'Comprar ahora con -36% OFF';
+  if(buybarBtnLabel) buybarBtnLabel.textContent = 'Comprar -36% OFF';
+  if(priceNoteEl) priceNoteEl.textContent = 'Descuento de bienvenida activo. El valor final se confirma por WhatsApp antes de pagar.';
+  startCountdown(expiry);
+}
+
+function deactivateDiscount(expired){
+  document.body.classList.remove('discount-active');
+  if(priceNowEl) priceNowEl.textContent = formatCOP(PRICE_OLD);
+  if(buybarNowEl) buybarNowEl.textContent = formatCOP(PRICE_OLD);
+  if(ctaBtnLabel) ctaBtnLabel.textContent = 'Comprar ahora';
+  if(buybarBtnLabel) buybarBtnLabel.textContent = 'Comprar ahora';
+  if(countdownTimer){ clearInterval(countdownTimer); countdownTimer = null; }
+  if(buybarCountdownEl) buybarCountdownEl.textContent = '';
+
+  if(expired){
+    if(priceNoteEl) priceNoteEl.textContent = 'Tu descuento de bienvenida expiro. Puedes girar la ruleta de nuevo.';
+    if(urgencyEl) urgencyEl.innerHTML = '<span class="dot"></span> Tu oferta expiro — <button type="button" class="urgency-link" data-reopen>girar de nuevo</button>';
+  } else {
+    if(priceNoteEl) priceNoteEl.textContent = 'Gira la ruleta de bienvenida y desbloquea un descuento exclusivo por tiempo limitado.';
+    if(urgencyEl) urgencyEl.innerHTML = '<span class="dot"></span> Gira la ruleta y desbloquea tu descuento — <button type="button" class="urgency-link" data-reopen>girar ahora</button>';
+  }
+  bindReopenLinks();
+}
+
+function startCountdown(expiry){
+  if(countdownTimer) clearInterval(countdownTimer);
+  function tick(){
+    const diff = expiry - Date.now();
+    if(diff <= 0){
+      localStorage.removeItem(STORAGE_KEY);
+      deactivateDiscount(true);
+      return;
+    }
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    const txt = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    if(urgencyEl) urgencyEl.innerHTML = '<span class="dot"></span> Tu descuento de bienvenida termina en <span class="timer">' + txt + '</span>';
+    if(buybarCountdownEl) buybarCountdownEl.textContent = 'vence en ' + txt;
+  }
+  tick();
+  countdownTimer = setInterval(tick, 1000);
+}
+
+function initOffer(){
+  let saved = null;
+  try{ saved = JSON.parse(localStorage.getItem(STORAGE_KEY)); }catch(e){ saved = null; }
+  if(saved && saved.expiry && saved.expiry > Date.now()){
+    activateDiscount(saved.expiry, false);
+  } else {
+    if(saved) localStorage.removeItem(STORAGE_KEY);
+    deactivateDiscount(false);
+    setTimeout(openWheel, 900);
+  }
+}
+
+// ---------- RULETA: SEGMENTOS ----------
+const segments = [
+  { label:'5% OFF',            color:'#8B5CF6', type:'deco' },
+  { label:'Sigue intentando',  color:'#F1ECFB', type:'lose', darkText:true },
+  { label:'10% OFF',           color:'#5E17EB', type:'deco' },
+  { label:'🎁 Premio sorpresa', color:'#F4B400', type:'grand' },
+  { label:'15% OFF',           color:'#8B5CF6', type:'deco' },
+  { label:'Otro intento 🔄',    color:'#3D6DF2', type:'second' },
+  { label:'20% OFF',           color:'#5E17EB', type:'deco' },
+  { label:'Sigue intentando',  color:'#F1ECFB', type:'lose', darkText:true }
+];
+const SEGMENT_ANGLE = 360 / segments.length;
+const secondChanceIndex = segments.findIndex(function(s){ return s.type === 'second'; });
+const grandPrizeIndex = segments.findIndex(function(s){ return s.type === 'grand'; });
+
+const wheelEl = document.getElementById('wheel');
+const wheelOverlay = document.getElementById('wheelOverlay');
+const wheelSpinBtn = document.getElementById('wheelSpinBtn');
+const wheelAttemptsEl = document.getElementById('wheelAttempts');
+const wheelStageEl = document.getElementById('wheelStage');
+const wheelResultEl = document.getElementById('wheelResult');
+const wheelResultTitle = document.getElementById('wheelResultTitle');
+const wheelResultText = document.getElementById('wheelResultText');
+const confettiLayer = document.getElementById('confettiLayer');
+
+// pintar el gradiente de la ruleta
+const gradientParts = segments.map(function(seg, i){
+  return seg.color + ' ' + (i * SEGMENT_ANGLE) + 'deg ' + ((i + 1) * SEGMENT_ANGLE) + 'deg';
+});
+wheelEl.style.background = 'conic-gradient(from 0deg, ' + gradientParts.join(', ') + ')';
+
+// pintar las etiquetas de cada segmento
+segments.forEach(function(seg, i){
+  const mid = i * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
+  const label = document.createElement('div');
+  label.className = 'wheel-label' + (seg.type === 'grand' ? ' prize' : '');
+  label.style.transform = 'rotate(' + mid + 'deg) translate(0,-88px)';
+  label.style.color = seg.darkText ? 'var(--accent-deep)' : '#fff';
+  label.innerHTML = '<span>' + seg.label + '</span>';
+  wheelEl.appendChild(label);
+});
+
+let currentRotation = 0;
+let attemptsLeft = 2;
+let spinning = false;
+
+function spinTo(segmentIndex, extraSpins){
+  const targetMid = segmentIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
+  const desiredMod = ((360 - targetMid) % 360 + 360) % 360;
+  const currentMod = ((currentRotation % 360) + 360) % 360;
+  let delta = desiredMod - currentMod;
+  if(delta <= 0) delta += 360;
+  currentRotation = currentRotation + extraSpins * 360 + delta;
+  wheelEl.style.transform = 'rotate(' + currentRotation + 'deg)';
+}
+
+function launchConfetti(){
+  const colors = ['#5E17EB', '#8B5CF6', '#F4B400', '#38C583', '#FF6B9D'];
+  for(let i = 0; i < 40; i++){
+    const piece = document.createElement('span');
+    piece.className = 'confetti-piece';
+    piece.style.left = (Math.random() * 100) + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    const duration = 1.6 + Math.random() * 1.3;
+    const delay = Math.random() * 0.4;
+    piece.style.animation = 'confettiFall ' + duration + 's ease-in ' + delay + 's forwards';
+    confettiLayer.appendChild(piece);
+    setTimeout(function(){ piece.remove(); }, (duration + delay) * 1000 + 300);
+  }
+}
+
+function handleSpinResult(targetIndex){
+  spinning = false;
+  wheelEl.classList.remove('spinning');
+  attemptsLeft -= 1;
+
+  if(targetIndex === secondChanceIndex){
+    wheelAttemptsEl.textContent = '¡Ganaste otro intento! Gira una vez más para tu Premio Sorpresa 🎯';
+    wheelAttemptsEl.classList.remove('bounce'); void wheelAttemptsEl.offsetWidth; wheelAttemptsEl.classList.add('bounce');
+    wheelSpinBtn.textContent = 'Girar de nuevo';
+    wheelSpinBtn.disabled = false;
+  } else if(targetIndex === grandPrizeIndex){
+    wheelResultTitle.textContent = '¡Felicidades!';
+    wheelResultText.innerHTML = 'Ganaste el <strong>Premio Sorpresa</strong>: -36% OFF en tu Bolso Crossbody Antirrobo';
+    wheelStageEl.style.display = 'none';
+    wheelResultEl.classList.add('show');
+    launchConfetti();
+  }
+}
+
+wheelSpinBtn.addEventListener('click', function(){
+  if(spinning || attemptsLeft <= 0) return;
+  spinning = true;
+  wheelEl.classList.add('spinning');
+  wheelSpinBtn.disabled = true;
+
+  // primer giro: siempre cae en "otro intento". segundo giro (ultimo): siempre cae en el premio sorpresa.
+  const isFinalAttempt = attemptsLeft === 1;
+  const targetIndex = isFinalAttempt ? grandPrizeIndex : secondChanceIndex;
+
+  spinTo(targetIndex, 5);
+
+  function onTransitionEnd(e){
+    if(e.propertyName !== 'transform') return;
+    wheelEl.removeEventListener('transitionend', onTransitionEnd);
+    handleSpinResult(targetIndex);
+  }
+  wheelEl.addEventListener('transitionend', onTransitionEnd);
+});
+
+function openWheel(){
+  wheelOverlay.classList.add('open');
+}
+function closeWheelOverlay(){
+  wheelOverlay.classList.remove('open');
+}
+
+document.getElementById('wheelClose').addEventListener('click', closeWheelOverlay);
+wheelOverlay.addEventListener('click', function(e){ if(e.target === wheelOverlay){ closeWheelOverlay(); } });
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeWheelOverlay(); } });
+
+document.getElementById('wheelClaim').addEventListener('click', function(){
+  const expiry = Date.now() + OFFER_MS;
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify({ expiry: expiry })); }catch(e){}
+  closeWheelOverlay();
+  activateDiscount(expiry, true);
+});
+
+const reopenInlineBtn = document.getElementById('reopenWheelBtnInline');
+if(reopenInlineBtn) reopenInlineBtn.addEventListener('click', openWheel);
+
+initOffer();
 
 </script>
 
