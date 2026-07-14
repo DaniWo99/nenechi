@@ -428,6 +428,7 @@ body.discount-active .buybar-countdown{ display:block; }
 .wheel-result h3{ font-size:1.35rem; margin-bottom:8px; }
 .wheel-result > p{ color:var(--ink-soft); font-size:0.92rem; margin-bottom:18px; }
 .wheel-result strong{ color:var(--accent-deep); }
+.wheel-result strong.bright-green{ color:#00E676; text-shadow:0 0 14px rgba(0,230,118,0.5); }
 .wheel-price-anim{ display:flex; align-items:baseline; justify-content:center; gap:12px; margin-bottom:24px; }
 .wheel-price-anim .old{ font-family:'JetBrains Mono', monospace; text-decoration:line-through; color:var(--ink-soft); font-size:1rem; }
 .wheel-price-anim .new{
@@ -448,6 +449,175 @@ body.discount-active .buybar-countdown{ display:block; }
 @media (max-width:400px){
   .wheel-modal{ padding:24px 18px 24px; }
 }
+
+/* ============================================================
+   CHECKOUT / FORMULARIO DE COMPRA (Pago Contra Entrega)
+   ============================================================ */
+.checkout-overlay{
+  position:fixed; inset:0; z-index:210; background:rgba(24,21,31,0.62); backdrop-filter:blur(4px);
+  display:none; align-items:flex-start; justify-content:center; padding:20px; overflow-y:auto;
+}
+.checkout-overlay.open{ display:flex; animation:wheelFadeIn .3s ease; }
+.checkout-modal{
+  position:relative; background:var(--surface); border-radius:26px; max-width:480px; width:100%;
+  margin:20px auto; box-shadow:0 40px 90px -20px rgba(24,21,31,0.45);
+  animation:wheelPopIn .35s cubic-bezier(.2,.8,.3,1.3);
+}
+.checkout-close{
+  position:absolute; top:14px; right:14px; background:var(--paper-2); border:none; width:32px; height:32px;
+  border-radius:50%; font-size:1.05rem; color:var(--ink-soft); cursor:pointer; line-height:1; z-index:6;
+  display:flex; align-items:center; justify-content:center;
+}
+.checkout-scroll{ padding:30px 26px 26px; }
+.checkout-head h3{ font-size:1.25rem; margin-bottom:4px; }
+.checkout-head p{ color:var(--ink-soft); font-size:0.86rem; margin-bottom:16px; }
+
+.checkout-urgency{
+  display:flex; align-items:center; gap:8px; background:rgba(23,184,96,0.12); color:var(--price-green);
+  font-size:0.8rem; font-weight:800; padding:9px 12px; border-radius:12px; margin-bottom:16px; flex-wrap:wrap;
+}
+.checkout-urgency .dot{ width:7px;height:7px;border-radius:50%; background:var(--price-green); animation:pulse 1s infinite; flex-shrink:0; box-shadow:0 0 8px rgba(23,184,96,0.65); }
+.checkout-urgency .timer{
+  font-family:'JetBrains Mono', monospace; font-weight:800; color:var(--price-green);
+  background:rgba(23,184,96,0.16); padding:2px 8px; border-radius:6px;
+  animation:urgencyFlash .6s ease-out;
+}
+@keyframes urgencyFlash{
+  0%{ opacity:0.35; transform:scale(0.94); }
+  35%{ opacity:1; transform:scale(1.06); }
+  100%{ opacity:1; transform:scale(1); }
+}
+
+.checkout-trust-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+.checkout-trust-row span{
+  flex:1 1 auto; text-align:center; background:var(--paper-2); border:1px solid var(--line);
+  border-radius:12px; padding:9px 6px; font-size:0.76rem; font-weight:700; color:var(--ink);
+}
+
+.offer-cards{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:22px; }
+.offer-card{
+  position:relative; background:var(--paper-2); border:2px solid var(--line); border-radius:16px;
+  padding:18px 10px 14px; text-align:center; cursor:pointer; font-family:inherit;
+  display:flex; flex-direction:column; gap:4px;
+  transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.offer-card:hover{ transform:translateY(-2px); }
+.offer-card.selected{ border-color:var(--accent); box-shadow:0 10px 24px -10px rgba(94,23,235,0.4); animation:offerPop .3s ease; }
+.offer-card.best{ background:linear-gradient(160deg, var(--paper-2), rgba(23,184,96,0.1)); }
+.offer-card.best.selected{ border-color:var(--price-green); box-shadow:0 10px 24px -10px rgba(23,184,96,0.45); }
+@keyframes offerPop{ 0%{transform:scale(.94);} 60%{transform:scale(1.05);} 100%{transform:scale(1);} }
+.offer-badge{
+  position:absolute; top:-11px; left:50%; transform:translateX(-50%); background:var(--price-green); color:#fff;
+  font-size:0.64rem; font-weight:800; padding:3px 10px; border-radius:999px; white-space:nowrap;
+  box-shadow:0 6px 14px -6px rgba(23,184,96,0.6);
+}
+.offer-qty{ font-weight:800; font-size:0.92rem; margin-top:6px; }
+.offer-price{ font-family:'JetBrains Mono', monospace; font-weight:800; font-size:1.15rem; color:var(--accent-deep); }
+.offer-card.best .offer-price{ color:var(--price-green); }
+.offer-note{ font-size:0.72rem; color:var(--ink-soft); }
+.offer-save{ font-size:0.72rem; font-weight:700; color:var(--price-green); }
+
+.field{ margin-bottom:14px; }
+.field label{ display:block; font-size:0.8rem; font-weight:700; color:var(--ink-soft); margin-bottom:6px; }
+.field label .opt{ font-weight:500; text-transform:none; }
+.field input, .field select{
+  width:100%; padding:12px 14px; border-radius:12px; border:1.5px solid var(--line);
+  background:var(--surface); color:var(--ink); font-family:inherit; font-size:0.92rem;
+  transition:border-color .18s ease, box-shadow .18s ease;
+}
+.field input:focus, .field select:focus{
+  outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(94,23,235,0.15);
+}
+.field.invalid input, .field.invalid select{ border-color:#E4483B; }
+.field.valid input, .field.valid select{ border-color:var(--price-green); }
+.field-error{ display:block; font-size:0.74rem; color:#E4483B; margin-top:5px; min-height:1em; }
+.field-error.shake{ animation:fieldShake .4s ease; }
+@keyframes fieldShake{ 0%,100%{transform:translateX(0);} 25%{transform:translateX(-4px);} 75%{transform:translateX(4px);} }
+.field-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media (max-width:420px){ .field-row{ grid-template-columns:1fr; } }
+
+.qty-stepper{
+  display:flex; align-items:center; justify-content:space-between; border:1.5px solid var(--line);
+  border-radius:12px; overflow:hidden; height:44px;
+}
+.qty-stepper button{
+  width:40px; height:100%; border:none; background:var(--paper-2); color:var(--ink); font-size:1.15rem;
+  cursor:pointer; transition:background .15s ease, transform .15s ease;
+}
+.qty-stepper button:hover{ background:var(--line); }
+.qty-stepper button:active{ transform:scale(0.9); }
+.qty-stepper span{ font-weight:800; font-family:'JetBrains Mono', monospace; }
+
+.confirm-check{ display:flex; align-items:flex-start; gap:10px; font-size:0.84rem; margin:6px 0 2px; cursor:pointer; }
+.confirm-check input{ margin-top:3px; width:16px; height:16px; accent-color:var(--accent); flex-shrink:0; }
+.confirm-check.invalid span{ color:#E4483B; }
+
+.order-summary{
+  background:var(--paper-2); border:1px solid var(--line); border-radius:16px; padding:16px 18px; margin:20px 0 16px;
+}
+.order-summary h4{ font-size:0.8rem; text-transform:uppercase; letter-spacing:0.03em; color:var(--ink-soft); margin-bottom:10px; }
+.summary-row{ display:flex; justify-content:space-between; font-size:0.88rem; padding:4px 0; gap:10px; }
+.summary-row .good-text{ color:var(--price-green); font-weight:700; }
+.summary-total{
+  display:flex; justify-content:space-between; align-items:baseline; border-top:1px dashed var(--line);
+  margin-top:8px; padding-top:10px; font-weight:800; font-size:1.05rem;
+}
+.summary-total span:last-child{ font-family:'JetBrains Mono', monospace; color:var(--price-green); font-size:1.3rem; }
+
+.trust-badges{ display:flex; flex-wrap:wrap; gap:8px 14px; margin-bottom:18px; }
+.trust-badges span{ font-size:0.76rem; font-weight:600; color:var(--ink-soft); display:flex; align-items:center; gap:5px; }
+
+.checkout-trust-bottom{
+  text-align:center; background:var(--paper-2); border:1px solid var(--line); border-radius:12px;
+  padding:10px; font-size:0.8rem; font-weight:700; color:var(--accent-deep); margin-bottom:18px;
+}
+
+.checkout-submit{
+  background:var(--price-green); font-size:1.02rem; padding:16px 24px;
+  box-shadow:0 16px 32px -14px rgba(23,184,96,0.55);
+  animation:buyPulse 1.8s ease-in-out infinite;
+}
+.checkout-submit:hover{ background:#159951; }
+@keyframes buyPulse{
+  0%,100%{ box-shadow:0 16px 32px -14px rgba(23,184,96,0.55); transform:scale(1); }
+  50%{ box-shadow:0 16px 40px -6px rgba(23,184,96,0.75), 0 0 0 6px rgba(23,184,96,0.18); transform:scale(1.015); }
+}
+
+.checkout-status{ display:none; text-align:center; padding:36px 6px 14px; }
+.checkout-status.show{ display:block; }
+.spinner{
+  width:44px; height:44px; border-radius:50%; border:4px solid var(--line); border-top-color:var(--accent);
+  margin:0 auto 18px; animation:spin .8s linear infinite;
+}
+@keyframes spin{ to{transform:rotate(360deg);} }
+.checkout-status .success-icon{ font-size:3rem; display:block; margin-bottom:10px; animation:prizeSpin .5s ease; }
+.checkout-status h3{ font-size:1.2rem; margin-bottom:8px; }
+.checkout-status p{ color:var(--ink-soft); font-size:0.9rem; }
+
+@media (prefers-reduced-motion:reduce){
+  .checkout-submit, .offer-card.selected, .checkout-overlay.open, .checkout-modal, .spinner, .checkout-status .success-icon, .checkout-urgency .timer, .checkout-urgency .dot{ animation:none !important; }
+}
+
+/* ---- Exit intent ---- */
+.exit-overlay{
+  position:fixed; inset:0; z-index:220; background:rgba(24,21,31,0.62); backdrop-filter:blur(4px);
+  display:none; align-items:center; justify-content:center; padding:20px;
+}
+.exit-overlay.open{ display:flex; animation:wheelFadeIn .3s ease; }
+.exit-modal{
+  background:var(--surface); border-radius:22px; max-width:380px; width:100%; padding:32px 26px;
+  text-align:center; box-shadow:0 40px 90px -20px rgba(24,21,31,0.45);
+  animation:wheelPopIn .35s cubic-bezier(.2,.8,.3,1.3);
+}
+.exit-modal .exit-icon{ font-size:2.4rem; margin-bottom:10px; display:block; }
+.exit-modal h3{ font-size:1.2rem; margin-bottom:10px; }
+.exit-modal p{ color:var(--ink-soft); font-size:0.92rem; margin-bottom:22px; }
+.exit-actions{ display:flex; flex-direction:column; gap:10px; }
+.exit-actions .btn-ghost{
+  background:none; border:1px solid var(--line); color:var(--ink-soft); padding:12px 20px; border-radius:999px;
+  font-weight:700; font-size:0.9rem; cursor:pointer; font-family:inherit;
+}
+.exit-actions .btn-ghost:hover{ background:var(--paper-2); }
 
 /* ---------- AJUSTES MOVIL ---------- */
 @media (max-width:600px){
@@ -496,6 +666,15 @@ body.discount-active .buybar-countdown{ display:block; }
   .buybar-price .now{ font-size:1.02rem; }
   .buybar-price .old{ font-size:0.66rem; }
   .buybar .btn-buy{ font-size:0.86rem; padding:12px 14px; }
+
+  .checkout-scroll{ padding:22px 16px 20px; }
+  .checkout-head h3{ font-size:1.12rem; }
+  .offer-cards{ gap:8px; }
+  .offer-card{ padding:14px 6px 12px; }
+  .offer-price{ font-size:1rem; }
+  .checkout-trust-row span{ font-size:0.7rem; padding:8px 5px; }
+  .checkout-submit{ font-size:0.92rem; padding:14px 18px; }
+  .exit-modal{ padding:26px 20px; }
 }
 
 @media (max-width:360px){
@@ -579,11 +758,11 @@ body.discount-active .buybar-countdown{ display:block; }
         </div>
 
         <div class="cta-col">
-          <a class="btn block btn-buy" id="ctaWaBtn" target="_blank" href="https://wa.me/573241482071?text=Hola%20Nenechi%2C%20me%20interesa%20el%20Bolso%20Crossbody%20Antirrobo">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Zm4-5.4c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.9-.3-1.7-1-.6-.6-1-1.3-1.1-1.5-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 3.9 3.4.5.2.9.3 1.3.4.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1Z"/></svg>
+          <button type="button" class="btn block btn-buy" id="ctaBuyBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8h12l1 12H5L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
             <span id="ctaBtnLabel">Comprar ahora</span>
-          </a>
-          <span class="cta-sub">Te lleva directo a WhatsApp · respuesta directa, sin filas de espera</span>
+          </button>
+          <span class="cta-sub">Pago Contra Entrega · Confirmamos tu pedido por WhatsApp</span>
         </div>
 
         <div class="features">
@@ -687,7 +866,7 @@ body.discount-active .buybar-countdown{ display:block; }
     <div class="faq reveal">
       <details class="faq-item" open>
         <summary>Como confirmo mi pedido del bolso?</summary>
-        <p>Das clic en "Hacer mi pedido por WhatsApp", nos escribes y confirmamos color, direccion y forma de pago contigo directamente.</p>
+        <p>Das clic en "Hacer mi pedido", completas tus datos de envio (nombre, direccion y color) y confirmamos los ultimos detalles contigo por WhatsApp. Pagas contra entrega, cuando el bolso llega a tus manos.</p>
       </details>
       <details class="faq-item">
         <summary>La power bank viene incluida?</summary>
@@ -728,10 +907,10 @@ body.discount-active .buybar-countdown{ display:block; }
     <span class="now mono" id="buybarNow">$ 110.000</span>
     <span class="buybar-countdown" id="buybarCountdown"></span>
   </div>
-  <a class="btn btn-buy" id="buybarWaBtn" target="_blank" href="https://wa.me/573241482071?text=Hola%20Nenechi%2C%20me%20interesa%20el%20Bolso%20Crossbody%20Antirrobo">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.7L2 21l4.4-1.1A8.9 8.9 0 0 0 12 21a8.9 8.9 0 0 0 5.6-14.7ZM12 19.3a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3A7.3 7.3 0 1 1 12 19.3Zm4-5.4c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.9-.3-1.7-1-.6-.6-1-1.3-1.1-1.5-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.4.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 3.9 3.4.5.2.9.3 1.3.4.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1Z"/></svg>
+  <button type="button" class="btn btn-buy" id="buybarBuyBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8h12l1 12H5L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
     <span id="buybarBtnLabel">Comprar ahora</span>
-  </a>
+  </button>
 </div>
 
 <!-- ============ RULETA DE BIENVENIDA ============ -->
@@ -764,7 +943,7 @@ body.discount-active .buybar-countdown{ display:block; }
       <div class="confetti-layer" id="confettiLayerSecond"></div>
       <span class="prize-icon">🎯</span>
       <h3>¡Ganaste otro giro!</h3>
-      <p>Desbloqueaste <strong>1 intento más</strong>. Prepárate para tu última vuelta...</p>
+      <p>Desbloqueaste <strong class="bright-green">1 intento más</strong>. Prepárate para tu última vuelta...</p>
     </div>
 
     <div class="wheel-result" id="wheelResult">
@@ -777,6 +956,165 @@ body.discount-active .buybar-countdown{ display:block; }
         <span class="new mono">$ 69.900</span>
       </div>
       <button class="btn block" id="wheelClaim">Ver mi descuento</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FORMULARIO DE COMPRA (PAGO CONTRA ENTREGA) ============ -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-modal">
+    <button class="checkout-close" id="checkoutClose" aria-label="Cerrar">&#10005;</button>
+    <div class="checkout-scroll">
+
+      <div class="checkout-head">
+        <h3>🛍️ Finaliza tu pedido</h3>
+        <p>Bolso Crossbody Antirrobo · Pago Contra Entrega</p>
+      </div>
+
+      <div class="checkout-urgency" id="checkoutUrgencyWrap"><span class="dot"></span> Gira la ruleta y desbloquea tu descuento</div>
+
+      <div class="checkout-trust-row">
+        <span>🚚 Envío Gratis</span>
+        <span>💵 Pago Contra Entrega</span>
+        <span>🔒 Compra Segura</span>
+        <span>📦 Confirmación por WhatsApp</span>
+      </div>
+
+      <div class="offer-cards" id="offerCards">
+        <button type="button" class="offer-card" data-qty="1">
+          <span class="offer-qty">1 Bolso</span>
+          <span class="offer-price mono">$69.900</span>
+          <span class="offer-note">Envío Gratis</span>
+        </button>
+        <button type="button" class="offer-card best" data-qty="2">
+          <span class="offer-badge">⭐ MÁS VENDIDO</span>
+          <span class="offer-qty">2 Bolsos</span>
+          <span class="offer-price mono">$119.900</span>
+          <span class="offer-save">Ahorras $19.900</span>
+        </button>
+      </div>
+
+      <div id="checkoutFormWrap">
+        <form id="checkoutForm" novalidate>
+          <div class="field">
+            <label>Nombre completo</label>
+            <input type="text" id="fName" placeholder="Ej: Laura Gómez" autocomplete="name">
+            <span class="field-error" id="errName"></span>
+          </div>
+
+          <div class="field">
+            <label>Celular</label>
+            <input type="tel" id="fPhone" placeholder="Ej: 300 123 4567" autocomplete="tel" inputmode="numeric">
+            <span class="field-error" id="errPhone"></span>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Departamento</label>
+              <select id="fDept"><option value="">Selecciona...</option></select>
+              <span class="field-error" id="errDept"></span>
+            </div>
+            <div class="field">
+              <label>Ciudad</label>
+              <input type="text" id="fCity" placeholder="Ej: Medellín">
+              <span class="field-error" id="errCity"></span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Dirección completa</label>
+            <input type="text" id="fAddress" placeholder="Ej: Cra 45 # 12-34">
+            <span class="field-error" id="errAddress"></span>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Barrio</label>
+              <input type="text" id="fNeighborhood" placeholder="Ej: El Poblado">
+              <span class="field-error" id="errNeighborhood"></span>
+            </div>
+            <div class="field">
+              <label>Casa / Apto / Torre <span class="opt">(opcional)</span></label>
+              <input type="text" id="fUnit" placeholder="Ej: Apto 301, Torre 2">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Color</label>
+              <select id="fColor">
+                <option value="">Selecciona un color</option>
+                <option>Negro</option>
+                <option>Negro Dorado</option>
+                <option>Gris Dorado</option>
+                <option>Oro Azul</option>
+              </select>
+              <span class="field-error" id="errColor"></span>
+            </div>
+            <div class="field">
+              <label>Cantidad</label>
+              <div class="qty-stepper">
+                <button type="button" id="qtyMinus" aria-label="Menos">−</button>
+                <span id="qtyValue">1</span>
+                <button type="button" id="qtyPlus" aria-label="Mas">+</button>
+              </div>
+            </div>
+          </div>
+
+          <label class="confirm-check" id="confirmCheckWrap">
+            <input type="checkbox" id="fConfirm">
+            <span>Confirmo que revisé mis datos y son correctos.</span>
+          </label>
+          <span class="field-error" id="errConfirm"></span>
+
+          <div class="order-summary">
+            <h4>Resumen de tu pedido</h4>
+            <div class="summary-row"><span>Producto</span><span>Bolso Crossbody Antirrobo</span></div>
+            <div class="summary-row"><span>Color</span><span id="sumColor">—</span></div>
+            <div class="summary-row"><span>Cantidad</span><span id="sumQty">1</span></div>
+            <div class="summary-row"><span>Envío</span><span class="good-text">Gratis</span></div>
+            <div class="summary-row"><span>Pago</span><span>Contra Entrega</span></div>
+            <div class="summary-total"><span>Total</span><span id="sumTotal" class="mono">$69.900</span></div>
+          </div>
+
+          <div class="trust-badges">
+            <span>✔ Más de 500 clientes satisfechos</span>
+            <span>✔ Pago al recibir</span>
+            <span>✔ Envío Gratis</span>
+            <span>✔ Compra protegida</span>
+            <span>✔ Atención por WhatsApp</span>
+          </div>
+
+          <div class="checkout-trust-bottom">🔒 Compra 100% segura y protegida — pagas solo cuando recibes tu bolso</div>
+
+          <button type="submit" class="btn block checkout-submit" id="checkoutSubmit">Hacer mi pedido</button>
+        </form>
+      </div>
+
+      <div class="checkout-status" id="checkoutLoading">
+        <div class="spinner"></div>
+        <p>Estamos enviando tu pedido...</p>
+      </div>
+
+      <div class="checkout-status" id="checkoutSuccess">
+        <span class="success-icon">✅</span>
+        <h3>¡Pedido recibido!</h3>
+        <p>En unos minutos confirmaremos tu compra por WhatsApp.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============ EXIT INTENT (escritorio) ============ -->
+<div class="exit-overlay" id="exitOverlay">
+  <div class="exit-modal">
+    <span class="exit-icon">🎒</span>
+    <h3>¡Espera! Antes de irte...</h3>
+    <p>Por hoy puedes llevar <strong>2 bolsos por solo $119.900</strong> con envío gratis.</p>
+    <div class="exit-actions">
+      <button type="button" class="btn block" id="exitAccept">🟢 Aprovechar oferta</button>
+      <button type="button" class="btn-ghost" id="exitDecline">Continuar saliendo</button>
     </div>
   </div>
 </div>
@@ -944,9 +1282,11 @@ function deactivateDiscount(expired){
   if(expired){
     if(priceNoteEl) priceNoteEl.textContent = 'Tu descuento de bienvenida expiro. Puedes girar la ruleta de nuevo.';
     if(urgencyEl) urgencyEl.innerHTML = '<span class="dot"></span> Tu oferta expiro — <button type="button" class="urgency-link" data-reopen>girar de nuevo</button>';
+    if(checkoutUrgencyWrap) checkoutUrgencyWrap.innerHTML = '<span class="dot"></span> Tu oferta expiro — <button type="button" class="urgency-link" data-reopen>girar de nuevo</button>';
   } else {
     if(priceNoteEl) priceNoteEl.textContent = 'Gira la ruleta de bienvenida y desbloquea un descuento exclusivo por tiempo limitado.';
     if(urgencyEl) urgencyEl.innerHTML = '<span class="dot"></span> Gira la ruleta y desbloquea tu descuento — <button type="button" class="urgency-link" data-reopen>girar ahora</button>';
+    if(checkoutUrgencyWrap) checkoutUrgencyWrap.innerHTML = '<span class="dot"></span> Gira la ruleta y desbloquea tu descuento — <button type="button" class="urgency-link" data-reopen>girar ahora</button>';
   }
   bindReopenLinks();
 }
@@ -966,6 +1306,7 @@ function startCountdown(expiry){
     const txt = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
     if(urgencyEl) urgencyEl.innerHTML = '<span class="dot"></span> Tu descuento de bienvenida termina en <span class="timer">' + txt + '</span>';
     if(buybarCountdownEl) buybarCountdownEl.textContent = 'vence en ' + txt;
+    if(checkoutUrgencyWrap) checkoutUrgencyWrap.innerHTML = '<span class="dot"></span> Tu descuento termina en <span class="timer">' + txt + '</span>';
   }
   tick();
   countdownTimer = setInterval(tick, 1000);
@@ -1259,12 +1600,245 @@ function closeWheelOverlay(){
 
 document.getElementById('wheelClose').addEventListener('click', closeWheelOverlay);
 wheelOverlay.addEventListener('click', function(e){ if(e.target === wheelOverlay){ closeWheelOverlay(); } });
-document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeWheelOverlay(); } });
 
-document.getElementById('wheelClaim').addEventListener('click', closeWheelOverlay);
+document.getElementById('wheelClaim').addEventListener('click', function(){
+  closeWheelOverlay();
+});
 
 const reopenInlineBtn = document.getElementById('reopenWheelBtnInline');
 if(reopenInlineBtn) reopenInlineBtn.addEventListener('click', openWheel);
+
+// ============================================================
+// FORMULARIO DE COMPRA (Pago Contra Entrega)
+// ============================================================
+const DEPARTAMENTOS = ['Amazonas','Antioquia','Arauca','Atlántico','Bogotá D.C.','Bolívar','Boyacá','Caldas',
+  'Caquetá','Casanare','Cauca','Cesar','Chocó','Córdoba','Cundinamarca','Guainía','Guaviare','Huila','La Guajira',
+  'Magdalena','Meta','Nariño','Norte de Santander','Putumayo','Quindío','Risaralda','San Andrés y Providencia',
+  'Santander','Sucre','Tolima','Valle del Cauca','Vaupés','Vichada'];
+
+const checkoutOverlay = document.getElementById('checkoutOverlay');
+const checkoutClose = document.getElementById('checkoutClose');
+const checkoutForm = document.getElementById('checkoutForm');
+const checkoutFormWrap = document.getElementById('checkoutFormWrap');
+const checkoutLoadingEl = document.getElementById('checkoutLoading');
+const checkoutSuccessEl = document.getElementById('checkoutSuccess');
+const checkoutUrgencyWrap = document.getElementById('checkoutUrgencyWrap');
+const fDept = document.getElementById('fDept');
+const fColor = document.getElementById('fColor');
+const fConfirm = document.getElementById('fConfirm');
+const confirmCheckWrap = document.getElementById('confirmCheckWrap');
+const qtyValueEl = document.getElementById('qtyValue');
+const sumColorEl = document.getElementById('sumColor');
+const sumQtyEl = document.getElementById('sumQty');
+const sumTotalEl = document.getElementById('sumTotal');
+const offerCards = Array.from(document.querySelectorAll('.offer-card'));
+
+DEPARTAMENTOS.forEach(function(dep){
+  const opt = document.createElement('option');
+  opt.value = dep; opt.textContent = dep;
+  fDept.appendChild(opt);
+});
+
+let orderQty = 1;
+
+function calcTotal(qty){
+  if(qty <= 1) return 69900 * Math.max(qty, 1);
+  if(qty === 2) return 119900;
+  return 119900 + (qty - 2) * 69900;
+}
+
+function updateOrderSummary(animate){
+  qtyValueEl.textContent = orderQty;
+  sumQtyEl.textContent = orderQty;
+  sumColorEl.textContent = fColor.value || '—';
+  const total = calcTotal(orderQty);
+  const prevVal = parseInt((sumTotalEl.textContent || '').replace(/[^0-9]/g, ''), 10) || total;
+  if(animate){ animatePrice(sumTotalEl, prevVal, total, 450); }
+  else { sumTotalEl.textContent = formatCOP(total); }
+}
+
+function setOrderQty(qty){
+  orderQty = Math.max(1, Math.min(10, qty));
+  offerCards.forEach(function(card){
+    card.classList.toggle('selected', parseInt(card.dataset.qty, 10) === orderQty);
+  });
+  updateOrderSummary(true);
+}
+
+offerCards.forEach(function(card){
+  card.addEventListener('click', function(){ setOrderQty(parseInt(card.dataset.qty, 10)); });
+});
+document.getElementById('qtyMinus').addEventListener('click', function(){ setOrderQty(orderQty - 1); });
+document.getElementById('qtyPlus').addEventListener('click', function(){ setOrderQty(orderQty + 1); });
+
+fColor.addEventListener('change', function(){
+  updateOrderSummary(false);
+  fColor.closest('.field').classList.remove('invalid');
+  document.getElementById('errColor').textContent = '';
+});
+
+function clearCheckoutErrors(){
+  document.querySelectorAll('#checkoutForm .field-error').forEach(function(el){
+    el.textContent = ''; el.classList.remove('shake');
+  });
+  document.querySelectorAll('#checkoutForm .field').forEach(function(el){ el.classList.remove('invalid'); });
+  confirmCheckWrap.classList.remove('invalid');
+}
+
+function showCheckoutError(inputEl, errorId, message){
+  const container = inputEl.closest('.field') || inputEl.closest('.confirm-check');
+  const errEl = document.getElementById(errorId);
+  if(container) container.classList.add('invalid');
+  if(errEl){
+    errEl.textContent = message;
+    errEl.classList.remove('shake'); void errEl.offsetWidth; errEl.classList.add('shake');
+  }
+}
+
+function validateCheckoutForm(){
+  clearCheckoutErrors();
+  let firstInvalidEl = null;
+  let ok = true;
+  function markInvalid(el, errorId, message){
+    ok = false;
+    showCheckoutError(el, errorId, message);
+    if(!firstInvalidEl) firstInvalidEl = el;
+  }
+
+  const fName = document.getElementById('fName');
+  const fPhone = document.getElementById('fPhone');
+  const fCity = document.getElementById('fCity');
+  const fAddress = document.getElementById('fAddress');
+  const fNeighborhood = document.getElementById('fNeighborhood');
+
+  if(!fName.value.trim()) markInvalid(fName, 'errName', 'Ingresa tu nombre completo');
+
+  const phoneDigits = fPhone.value.replace(/\D/g, '');
+  if(!fPhone.value.trim() || phoneDigits.length < 7) markInvalid(fPhone, 'errPhone', 'Ingresa un celular válido');
+
+  if(!fDept.value) markInvalid(fDept, 'errDept', 'Selecciona tu departamento');
+  if(!fCity.value.trim()) markInvalid(fCity, 'errCity', 'Ingresa tu ciudad');
+  if(!fAddress.value.trim()) markInvalid(fAddress, 'errAddress', 'Ingresa tu direccion completa');
+  if(!fNeighborhood.value.trim()) markInvalid(fNeighborhood, 'errNeighborhood', 'Ingresa tu barrio');
+  if(!fColor.value) markInvalid(fColor, 'errColor', 'Selecciona un color');
+  if(!fConfirm.checked) markInvalid(fConfirm, 'errConfirm', 'Debes confirmar tus datos');
+
+  if(firstInvalidEl && firstInvalidEl.focus) firstInvalidEl.focus({preventScroll:false});
+  return ok;
+}
+
+// ---------- BACKEND: preparado para conectar con Google Sheets via Apps Script ----------
+// Cuando publiques tu Google Apps Script como Web App, pega la URL /exec aqui abajo.
+const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyL34VGQAe5Y_arMN5qEdRXdmvbc_e0omdcJyjTvJRBAp0jKqog2m-QC-cVzszAjYwtSA/exec';
+
+function sendOrderToSheet(orderData){
+  if(!GOOGLE_SHEETS_WEBAPP_URL){
+    console.log('[Pedido listo para conectar a Google Sheets]', orderData);
+    return;
+  }
+  fetch(GOOGLE_SHEETS_WEBAPP_URL, {
+    method: 'POST',
+    mode: 'no-cors', // Apps Script normalmente no responde con cabeceras CORS
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderData)
+  }).catch(function(err){
+    console.error('No se pudo enviar el pedido a Google Sheets:', err);
+  });
+}
+
+function resetCheckoutState(){
+  clearCheckoutErrors();
+  checkoutForm.reset();
+  checkoutFormWrap.style.display = '';
+  checkoutLoadingEl.classList.remove('show');
+  checkoutSuccessEl.classList.remove('show');
+  setOrderQty(1);
+}
+
+function openCheckout(presetQty){
+  resetCheckoutState();
+  if(presetQty) setOrderQty(presetQty);
+  checkoutOverlay.classList.add('open');
+}
+function closeCheckout(){
+  checkoutOverlay.classList.remove('open');
+}
+
+checkoutClose.addEventListener('click', closeCheckout);
+checkoutOverlay.addEventListener('click', function(e){ if(e.target === checkoutOverlay) closeCheckout(); });
+
+checkoutForm.addEventListener('submit', function(e){
+  e.preventDefault();
+  if(!validateCheckoutForm()) return;
+
+  const orderData = {
+    producto: 'Bolso Crossbody Antirrobo',
+    color: fColor.value,
+    cantidad: orderQty,
+    total: calcTotal(orderQty),
+    nombre: document.getElementById('fName').value.trim(),
+    celular: document.getElementById('fPhone').value.trim(),
+    departamento: fDept.value,
+    ciudad: document.getElementById('fCity').value.trim(),
+    direccion: document.getElementById('fAddress').value.trim(),
+    barrio: document.getElementById('fNeighborhood').value.trim(),
+    unidad: document.getElementById('fUnit').value.trim(),
+    envio: 'Gratis',
+    pago: 'Contra Entrega',
+    fecha: new Date().toISOString()
+  };
+
+  checkoutFormWrap.style.display = 'none';
+  checkoutLoadingEl.classList.add('show');
+
+  setTimeout(function(){
+    checkoutLoadingEl.classList.remove('show');
+    checkoutSuccessEl.classList.add('show');
+    sendOrderToSheet(orderData);
+  }, 1500);
+});
+
+document.getElementById('ctaBuyBtn').addEventListener('click', function(){ openCheckout(); });
+document.getElementById('buybarBuyBtn').addEventListener('click', function(){ openCheckout(); });
+
+// ============================================================
+// EXIT INTENT (solo escritorio) — se muestra una sola vez
+// ============================================================
+const exitOverlay = document.getElementById('exitOverlay');
+let exitIntentArmed = true;
+
+function closeExitIntent(){
+  exitOverlay.classList.remove('open');
+}
+
+function maybeShowExitIntent(e){
+  if(!exitIntentArmed) return;
+  if(window.innerWidth <= 940) return; // solo escritorio
+  if(e.clientY > 0) return; // solo al salir por la parte superior de la ventana
+  if(checkoutOverlay.classList.contains('open') || wheelOverlay.classList.contains('open')) return;
+  let seen = false;
+  try{ seen = localStorage.getItem('nenechi_exit_intent_seen') === '1'; }catch(err){ seen = false; }
+  if(seen){ exitIntentArmed = false; return; }
+  exitIntentArmed = false;
+  try{ localStorage.setItem('nenechi_exit_intent_seen', '1'); }catch(err){}
+  exitOverlay.classList.add('open');
+}
+document.addEventListener('mouseout', maybeShowExitIntent);
+
+document.getElementById('exitAccept').addEventListener('click', function(){
+  closeExitIntent();
+  openCheckout(2);
+});
+document.getElementById('exitDecline').addEventListener('click', closeExitIntent);
+exitOverlay.addEventListener('click', function(e){ if(e.target === exitOverlay) closeExitIntent(); });
+
+// Escape cierra el overlay superior activo (checkout > exit intent > ruleta)
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Escape') return;
+  if(checkoutOverlay.classList.contains('open')){ closeCheckout(); return; }
+  if(exitOverlay.classList.contains('open')){ closeExitIntent(); return; }
+  if(wheelOverlay.classList.contains('open')){ closeWheelOverlay(); return; }
+});
 
 initOffer();
 
