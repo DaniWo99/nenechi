@@ -1732,17 +1732,19 @@ function validateCheckoutForm(){
 const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyL34VGQAe5Y_arMN5qEdRXdmvbc_e0omdcJyjTvJRBAp0jKqog2m-QC-cVzszAjYwtSA/exec';
 
 function sendOrderToSheet(orderData){
-  if(!GOOGLE_SHEETS_WEBAPP_URL){
-    console.log('[Pedido listo para conectar a Google Sheets]', orderData);
-    return;
-  }
   fetch(GOOGLE_SHEETS_WEBAPP_URL, {
     method: 'POST',
-    mode: 'no-cors', // Apps Script normalmente no responde con cabeceras CORS
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(orderData)
-  }).catch(function(err){
-    console.error('No se pudo enviar el pedido a Google Sheets:', err);
+  })
+  .then(async response => {
+    console.log("Status:", response.status);
+    console.log(await response.text());
+  })
+  .catch(err => {
+    console.error(err);
   });
 }
 
