@@ -29,13 +29,26 @@
   html:not([data-theme="light"]){
     --paper:#17141D; --paper-2:#221D30; --surface:#1F1A29;
     --header-bg:rgba(23,20,29,0.86); --ink:#F5F3FA; --ink-soft:#B0A7C8;
-    --line:#332C46; --good:#38C583; color-scheme:dark;
+    --line:#332C46; --good:#38C583; 
+    
+    /* Agregamos morados más claros para que contrasten con el fondo oscuro */
+    --accent:#8B5CF6;       /* Morado más brillante (tu actual --accent-glow) */
+    --accent-deep:#A78BFA;  /* Morado pastel para legibilidad extrema */
+    
+    color-scheme:dark;
   }
 }
+
 html[data-theme="dark"]{
   --paper:#17141D; --paper-2:#221D30; --surface:#1F1A29;
   --header-bg:rgba(23,20,29,0.86); --ink:#F5F3FA; --ink-soft:#B0A7C8;
-  --line:#332C46; --good:#38C583; color-scheme:dark;
+  --line:#332C46; --good:#38C583; 
+  
+  /* Debes replicar las mismas variables aquí */
+  --accent:#8B5CF6;
+  --accent-deep:#A78BFA;
+  
+  color-scheme:dark;
 }
 html[data-theme="light"]{
   --paper:#FAFAF7; --paper-2:#F1ECFB; --surface:#FFFFFF;
@@ -1329,7 +1342,7 @@ const segments = [
   { lines:['10%','OFF'],                 color:'#8B5CF6', type:'deco' },
   { lines:['1 INTENTO','MÁS'],           color:'#3D6DF2', type:'second' },
   { lines:['15%','OFF'],                 color:'#5E17EB', type:'deco' },
-  { lines:['PREMIO','SORPRESA','🎁'],    color:'#F4B400', type:'grand', darkText:true },
+  { lines:['PREMIO','SORPRESA','🎁'],    color:'#F4B400', type:'grand', darkText:false },
   { lines:['20%','OFF'],                 color:'#8B5CF6', type:'deco' }
 ];
 const SEGMENT_ANGLE = 360 / segments.length;
