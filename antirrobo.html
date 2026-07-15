@@ -632,6 +632,51 @@ body.discount-active .buybar-countdown{ display:block; }
 }
 .exit-actions .btn-ghost:hover{ background:var(--paper-2); }
 
+/* ---- Abandono de formulario de compra (retencion) ---- */
+.checkout-abandon-overlay{
+  position:fixed; inset:0; z-index:230; background:rgba(24,21,31,0.68); backdrop-filter:blur(4px);
+  display:none; align-items:center; justify-content:center; padding:20px;
+}
+.checkout-abandon-overlay.open{ display:flex; animation:wheelFadeIn .3s ease; }
+.checkout-abandon-modal{
+  position:relative; background:var(--surface); border-radius:22px; max-width:400px; width:100%; padding:34px 26px 28px;
+  text-align:center; box-shadow:0 40px 90px -20px rgba(24,21,31,0.45);
+  animation:wheelPopIn .35s cubic-bezier(.2,.8,.3,1.3);
+}
+.checkout-abandon-close{
+  position:absolute; top:14px; right:14px; background:var(--paper-2); border:none; width:32px; height:32px;
+  border-radius:50%; font-size:1.05rem; color:var(--ink-soft); cursor:pointer; line-height:1; z-index:6;
+  display:flex; align-items:center; justify-content:center;
+}
+.checkout-abandon-modal .abandon-icon{ font-size:2.4rem; margin-bottom:10px; display:block; }
+.checkout-abandon-modal h3{ font-size:1.4rem; margin-bottom:12px; }
+.checkout-abandon-modal p{ color:var(--ink-soft); font-size:0.92rem; margin-bottom:16px; }
+.abandon-stock{
+  display:flex; align-items:center; justify-content:center; gap:8px; background:rgba(228,72,59,0.12); color:#E4483B;
+  font-size:0.82rem; font-weight:800; padding:10px 12px; border-radius:12px; margin-bottom:20px;
+}
+.abandon-stock .dot{ width:7px;height:7px;border-radius:50%; background:#E4483B; animation:pulse 1s infinite; flex-shrink:0; box-shadow:0 0 8px rgba(228,72,59,0.55); }
+.abandon-offer{
+  background:var(--paper-2); border:1px solid var(--line); border-radius:16px;
+  padding:16px 12px; margin-bottom:14px;
+}
+.abandon-offer-qty{ display:block; font-weight:700; font-size:0.9rem; color:var(--ink-soft); margin-bottom:4px; }
+.abandon-offer-price{ font-family:'JetBrains Mono', monospace; font-weight:800; font-size:2rem; color:var(--price-green); }
+.abandon-trust-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+.abandon-trust-row span{
+  flex:1 1 auto; text-align:center; background:var(--paper-2); border:1px solid var(--line);
+  border-radius:12px; padding:8px 6px; font-size:0.76rem; font-weight:700; color:var(--ink);
+}
+.abandon-actions{ display:flex; flex-direction:column; gap:10px; }
+.abandon-actions .btn{
+  background:var(--price-green); box-shadow:0 16px 32px -14px rgba(23,184,96,0.55);
+}
+.abandon-actions .btn:hover{ background:#159951; }
+
+@media (prefers-reduced-motion:reduce){
+  .checkout-abandon-overlay.open, .checkout-abandon-modal, .abandon-stock .dot{ animation:none !important; }
+}
+
 /* ---------- AJUSTES MOVIL ---------- */
 @media (max-width:600px){
   .wrap{ padding:0 16px; }
@@ -1128,6 +1173,28 @@ body.discount-active .buybar-countdown{ display:block; }
     <div class="exit-actions">
       <button type="button" class="btn block" id="exitAccept">🟢 Aprovechar oferta</button>
       <button type="button" class="btn-ghost" id="exitDecline">Continuar saliendo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ AVISO AL CERRAR FORMULARIO DE COMPRA ============ -->
+<div class="checkout-abandon-overlay" id="checkoutAbandonOverlay">
+  <div class="checkout-abandon-modal">
+    <button class="checkout-abandon-close" id="checkoutAbandonClose" aria-label="Cerrar">&#10005;</button>
+    <span class="abandon-icon">🎁</span>
+    <h3>¡Espera! No te vayas todavía.</h3>
+    <div class="abandon-offer">
+      <span class="abandon-offer-qty">Llévate un segundo bolso por solo</span>
+      <span class="abandon-offer-price mono">$30.100</span>
+    </div>
+    <p>Aprovecha esta oferta exclusiva antes de salir.</p>
+    <div class="abandon-trust-row">
+      <span>🚚 Envío GRATIS</span>
+      <span>💵 Pago contra entrega</span>
+    </div>
+    <div class="abandon-stock"><span class="dot"></span> ⏰ Oferta exclusiva válida solo durante esta visita</div>
+    <div class="abandon-actions">
+      <button type="button" class="btn block" id="checkoutAbandonReturn">🎁 Sí, quiero aprovechar la oferta</button>
     </div>
   </div>
 </div>
@@ -1653,8 +1720,10 @@ DEPARTAMENTOS.forEach(function(dep){
 });
 
 let orderQty = 1;
+let abandonPromoActive = false; // true cuando el cliente acepta la oferta 2x$100.000 del popup de retencion
 
 function calcTotal(qty){
+  if(abandonPromoActive && qty === 2) return 100000;
   if(qty <= 1) return 69900 * Math.max(qty, 1);
   if(qty === 2) return 119900;
   return 119900 + (qty - 2) * 69900;
@@ -1776,11 +1845,41 @@ function openCheckout(presetQty){
   checkoutOverlay.classList.add('open');
 }
 function closeCheckout(){
+  const orderWasPlaced = checkoutSuccessEl.classList.contains('show');
   checkoutOverlay.classList.remove('open');
+  if(!orderWasPlaced){
+    checkoutAbandonOverlay.classList.add('open');
+  }
 }
 
 checkoutClose.addEventListener('click', closeCheckout);
 checkoutOverlay.addEventListener('click', function(e){ if(e.target === checkoutOverlay) closeCheckout(); });
+
+// ============================================================
+// AVISO DE RETENCION AL CERRAR EL FORMULARIO DE COMPRA
+// ============================================================
+const checkoutAbandonOverlay = document.getElementById('checkoutAbandonOverlay');
+const checkoutAbandonClose = document.getElementById('checkoutAbandonClose');
+
+function closeCheckoutAbandon(){
+  checkoutAbandonOverlay.classList.remove('open');
+}
+checkoutAbandonClose.addEventListener('click', closeCheckoutAbandon);
+checkoutAbandonOverlay.addEventListener('click', function(e){ if(e.target === checkoutAbandonOverlay) closeCheckoutAbandon(); });
+
+document.getElementById('checkoutAbandonReturn').addEventListener('click', function(){
+  closeCheckoutAbandon();
+  abandonPromoActive = true;
+  const promoCard = document.querySelector('.offer-card[data-qty="2"]');
+  if(promoCard){
+    const priceEl = promoCard.querySelector('.offer-price');
+    const saveEl = promoCard.querySelector('.offer-save');
+    if(priceEl) priceEl.textContent = '$100.000';
+    if(saveEl) saveEl.textContent = 'Descuento exclusivo aplicado';
+  }
+  checkoutOverlay.classList.add('open'); // reabre el formulario conservando los datos ya escritos
+  setOrderQty(2);
+});
 
 checkoutForm.addEventListener('submit', function(e){
   e.preventDefault();
@@ -1830,7 +1929,7 @@ function maybeShowExitIntent(e){
   if(!exitIntentArmed) return;
   if(window.innerWidth <= 940) return; // solo escritorio
   if(e.clientY > 0) return; // solo al salir por la parte superior de la ventana
-  if(checkoutOverlay.classList.contains('open') || wheelOverlay.classList.contains('open')) return;
+  if(checkoutOverlay.classList.contains('open') || checkoutAbandonOverlay.classList.contains('open') || wheelOverlay.classList.contains('open')) return;
   let seen = false;
   try{ seen = localStorage.getItem('nenechi_exit_intent_seen') === '1'; }catch(err){ seen = false; }
   if(seen){ exitIntentArmed = false; return; }
@@ -1850,6 +1949,7 @@ exitOverlay.addEventListener('click', function(e){ if(e.target === exitOverlay) 
 // Escape cierra el overlay superior activo (checkout > exit intent > ruleta)
 document.addEventListener('keydown', function(e){
   if(e.key !== 'Escape') return;
+  if(checkoutAbandonOverlay.classList.contains('open')){ closeCheckoutAbandon(); return; }
   if(checkoutOverlay.classList.contains('open')){ closeCheckout(); return; }
   if(exitOverlay.classList.contains('open')){ closeExitIntent(); return; }
   if(wheelOverlay.classList.contains('open')){ closeWheelOverlay(); return; }
