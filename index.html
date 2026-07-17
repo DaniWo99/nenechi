@@ -533,7 +533,6 @@ function renderCatalog() {
       const newNum = parseInt(p.price.replace(/[^0-9]/g, ''));
       if (oldNum > newNum) {
         const pct = Math.round((1 - newNum/oldNum) * 100);
-        discountBadge = `<span class="discount-badge">-${pct}% OFF</span>`;
       }
     }
 
