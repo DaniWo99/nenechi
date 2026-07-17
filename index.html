@@ -612,25 +612,49 @@ function renderCatalog() {
   }).join('');
 
   // Re-attach click handlers
-  const ANTIRROBO_URL = 'https://nenechi.shop/antirrobo';
-  document.querySelectorAll('.product-card').forEach(function(card){
-    const id = card.getAttribute('data-id');
-    const cardProduct = products.find(x => x.id === id);
-    const isAntirrobo = !!cardProduct && /antirrobo/i.test(cardProduct.name);
+const ANTIRROBO_URL = 'https://nenechi.shop/antirrobo';
+const CAPIBARA_URL  = 'https://nenechi.shop/capibolso';
 
-    card.addEventListener('click', function(){
-      if(isAntirrobo){ window.location.href = ANTIRROBO_URL; return; }
-      openProductModal(card);
-    });
-    card.addEventListener('keydown', function(e){
-      if(e.key === 'Enter' || e.key === ' '){
-        e.preventDefault();
-        if(isAntirrobo){ window.location.href = ANTIRROBO_URL; return; }
-        openProductModal(card);
-      }
-    });
+document.querySelectorAll('.product-card').forEach(function(card){
+  const id = card.getAttribute('data-id');
+  const cardProduct = products.find(x => x.id === id);
+
+  const isAntirrobo = !!cardProduct && /antirrobo/i.test(cardProduct.name);
+  const isCapibara  = !!cardProduct && /capibara/i.test(cardProduct.name);
+
+  card.addEventListener('click', function(){
+
+    if(isAntirrobo){
+      window.location.href = ANTIRROBO_URL;
+      return;
+    }
+
+    if(isCapibara){
+      window.location.href = CAPIBARA_URL;
+      return;
+    }
+
+    openProductModal(card);
   });
-}
+
+  card.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+
+      if(isAntirrobo){
+        window.location.href = ANTIRROBO_URL;
+        return;
+      }
+
+      if(isCapibara){
+        window.location.href = CAPIBARA_URL;
+        return;
+      }
+
+      openProductModal(card);
+    }
+  });
+});
 
 // ============================
 // INIT
