@@ -1784,18 +1784,19 @@ function validateCheckoutForm(){
 const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyL34VGQAe5Y_arMN5qEdRXdmvbc_e0omdcJyjTvJRBAp0jKqog2m-QC-cVzszAjYwtSA/exec';
 
 function sendOrderToSheet(orderData){
-  fetch(GOOGLE_SHEETS_WEBAPP_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(orderData)
-  })
-  .then(async response => {
-    console.log("Status:", response.status);
-    console.log(await response.text());
-  })
-  .catch(err => {
-    console.error(err);
-  });
+
+  const formData = new FormData();
+
+  for (const key in orderData){
+    formData.append(key, orderData[key]);
+  }
+
+  fetch(GOOGLE_SHEETS_WEBAPP_URL,{
+    method:'POST',
+    mode:'no-cors',
+    body:formData
+  }).catch(console.error);
+
 }
 
 function resetCheckoutState(){
