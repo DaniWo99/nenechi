@@ -385,18 +385,14 @@
 const LS_KEY_PRODUCTS = 'nenechi_products';
 let _cachedProducts = null;
 
-// Datos de productos incrustados directamente aqui.
-// Esto garantiza que la web SIEMPRE muestre los productos y sus fotos,
-// sin depender de que el archivo products.json se descargue bien
-// (evita problemas al abrir el archivo directamente con doble clic,
-// o si el hosting no sirve products.json correctamente).
+// Datos de productos incrustados directamente aqui (respaldo).
 const EMBEDDED_PRODUCTS = [
   {
     "id": "p1",
     "name": "🎒 Bolso ANTIRROBO | Pago CONTRAENTREGA y ENVÍO GRATIS Rápido 🚚✅",
     "tag": "Moda",
-    "price": "69900",
-    "oldPrice": "110000",
+    "price": "110000",
+    "oldPrice": "",
     "desc": "🎒 Bolso Crossbody Antirrobo – Muévete con Más Tranquilidad en tu Día a Día\n\n🚚 ¡ENVÍO GRATIS + PAGO CONTRAENTREGA!\n🔥 Precio de PROMOCIÓN por tiempo limitado\n\nEn Colombia, salir con el celular, la billetera o los documentos puede convertirse en una preocupación constante. Ya sea en el transporte público, caminando por la ciudad o durante un viaje, llevar tus pertenencias protegidas hace la diferencia.\n\nEl Bolso Crossbody Antirrobo fue diseñado para brindarte mayor seguridad, comodidad y estilo, ayudándote a reducir el riesgo de robos oportunistas gracias a su diseño inteligente.\n\n🔋 Puerto USB Integrado\n\n🎨 Disponible en 4 colores:\n\nNegro\nNegro Dorado\nGris Dorado\nOro Azul\n🔐 5 Razones para elegir este bolso\n✅ Diseño Antirrobo que protege lo que más valoras\n\nSu compartimento principal cuenta con cremallera de seguridad, dificultando el acceso rápido a tus pertenencias. Además, incorpora un bolsillo oculto en la parte posterior, ideal para guardar el celular, dinero, documentos o pasaporte fuera de la vista y del alcance de los amigos de lo ajeno.\n\nSu diseño con detalles reflectivos también mejora tu visibilidad durante la noche.\n\n✅ Todo organizado y siempre al alcance\n\nOlvídate de buscar tus cosas por todo el bolso. Cuenta con múltiples compartimentos para llevar organizados:\n\n📱 Celular\n🔑 Llaves\n👛 Billetera\n🔋 Cargadores y power bank\n📚 Libros o tablet\n🥤 Accesorios personales\n\nCada objeto tiene su lugar para que accedas a él rápidamente cuando lo necesites.\n\n✅ Puerto USB Integrado\n\nCarga tu celular mientras caminas o te desplazas, sin necesidad de abrir el bolso.\n\nSolo conecta una power bank (no incluida) en el interior y disfruta de una carga práctica y segura.\n\n✅ Material Impermeable y de Alta Resistencia\n\nFabricado en tela Oxford de alta densidad, resistente al agua, al desgaste y a los rayones.\n\nSu espalda acolchada y transpirable reduce la presión sobre hombros y espalda, ofreciendo mayor comodidad incluso durante largas jornadas.\n\n✅ Moderno, cómodo y perfecto para cualquier ocasión\n\nSu diseño unisex combina con cualquier estilo y es ideal para:\n\n✔ Trabajo\n✔ Universidad\n✔ Transporte público\n✔ Viajes\n✔ Caminatas\n✔ Uso diario\n\nLleva tus pertenencias con mayor seguridad, comodidad y confianza donde quiera que vayas.\n\n💥 No esperes a que un descuido te cueste caro. Protege lo que más usas con un bolso diseñado para la realidad del día a día en Colombia.",
     "media": [
       {
@@ -428,90 +424,60 @@ const EMBEDDED_PRODUCTS = [
   },
   {
     "id": "p2",
-    "name": "Nombre del producto",
-    "tag": "Gadgets",
-    "price": "00000",
-    "oldPrice": "",
-    "desc": "Descripcion breve del producto: material, tamano, para que sirve y que incluye.",
-    "media": [
-      {
-        "type": "emoji",
-        "content": "🔌"
-      }
-    ],
-    "hidden": false
-  },
-  {
-    "id": "p3",
-    "name": "Nombre del producto",
+    "name": "🎒 Mochila de Capibara Kawaii – Lleva Ternura y Estilo a Todas Partes",
     "tag": "Moda",
-    "price": "00000",
-    "oldPrice": "",
-    "desc": "Descripcion breve del producto: material, tamano, para que sirve y que incluye.",
+    "price": "75900",
+    "oldPrice": "135000",
+    "desc": "🧸 Mochila de Capibara Kawaii fabricada en felpa ultrasuave con correas ajustables y cierre de cremallera.\n\n✨ Perfecta para uso diario, colegio, universidad, paseos o viajes.\n\nCuenta con amplio espacio para guardar celular, billetera, llaves, cosméticos, botella de agua, cuadernos y tablets de hasta 10\".\n\n📏 Medidas aproximadas:\n30 x 24 x 11 cm\n\n✔ Material de felpa y poliéster\n✔ Diseño kawaii exclusivo\n✔ Correas ajustables\n✔ Ligera y cómoda\n✔ Ideal para regalar",
     "media": [
       {
-        "type": "emoji",
-        "content": "🎒"
-      }
-    ],
-    "hidden": false
-  },
-  {
-    "id": "p4",
-    "name": "Nombre del producto",
-    "tag": "Hogar",
-    "price": "00000",
-    "oldPrice": "",
-    "desc": "Descripcion breve del producto: material, tamano, para que sirve y que incluye.",
-    "media": [
+        "type": "image",
+        "content": "https://github.com/DaniWo99/nenechi/blob/main/assets/capi/17644322844.jpg?raw=true"
+      },
       {
-        "type": "emoji",
-        "content": "🏠"
-      }
-    ],
-    "hidden": false
-  },
-  {
-    "id": "p5",
-    "name": "Nombre del producto",
-    "tag": "Gadgets",
-    "price": "00000",
-    "oldPrice": "",
-    "desc": "Descripcion breve del producto: material, tamano, para que sirve y que incluye.",
-    "media": [
+        "type": "image",
+        "content": "https://github.com/DaniWo99/nenechi/blob/main/assets/capi/2.jpg?raw=true"
+      },
       {
-        "type": "emoji",
-        "content": "🔌"
-      }
-    ],
-    "hidden": false
-  },
-  {
-    "id": "p6",
-    "name": "Nombre del producto",
-    "tag": "Moda",
-    "price": "00000",
-    "oldPrice": "",
-    "desc": "Descripcion breve del producto: material, tamano, para que sirve y que incluye.",
-    "media": [
+        "type": "video",
+        "content": "https://github.com/DaniWo99/nenechi/raw/refs/heads/main/assets/capi/Schoolbag%20video%20display%20effect!!!_1.mp4"
+      },
       {
-        "type": "emoji",
-        "content": "🎒"
+        "type": "image",
+        "content": "https://github.com/DaniWo99/nenechi/blob/main/assets/capi/Gemini_Generated_Image_ludqvzludqvzludq.png?raw=true"
+      },
+      {
+        "type": "video",
+        "content": "https://github.com/DaniWo99/nenechi/raw/refs/heads/main/assets/capi/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%BD%D0%B5%D1%82%D0%BC%D0%B0%D0%B3%D0%B0%D0%B7%D0%B8%D0%BD%20Wildberries%20%D1%88%D0%B8%D1%80%D0%BE%D0%BA%D0%B8%D0%B9%20%D0%B0%D1%81%D1%81%D0%BE%D1%80%D1%82%D0%B8%D0%BC%D0%B5%D0%BD%D1%82%20%D1%82%D0%BE%D0%B2%D0%B0%D1%80%D0%BE%D0%B2%20-%20%D1%81%D0%BA%D0%B8%D0%B4%D0%BA%D0%B8%20(1).mp4"
+      },
+      {
+        "type": "image",
+        "content": "https://github.com/DaniWo99/nenechi/blob/main/assets/capi/mochila-capibara-maleta-morral-peluche%20(2).jpg?raw=true"
+      },
+      {
+        "type": "image",
+        "content": "https://github.com/DaniWo99/nenechi/blob/main/assets/capi/3.jpg?raw=true"
+      },
+      {
+        "type": "image",
+        "content": "https://github.com/DaniWo99/nenechi/blob/main/assets/capi/17644322842.jpg?raw=true"
       }
     ],
     "hidden": false
   }
 ];
 
+const ANTIRROBO_URL = 'https://nenechi.shop/antirrobo';
+const CAPIBARA_URL = 'https://nenechi.shop/capibolso';
+
 function formatPrice(val) {
-  const num = parseInt(val.replace(/[^0-9]/g, ''));
+  const num = parseInt(val.toString().replace(/[^0-9]/g, ''));
   if (isNaN(num)) return '00.000';
   return num.toLocaleString('es-CO');
 }
 
 async function loadProducts() {
-  // 1. Intentar cargar desde products.json (asi se puede actualizar sin tocar el HTML,
-  //    si en el futuro el sitio esta en un servidor real)
+  // 1. Intentar cargar desde products.json
   try {
     const response = await fetch('products.json?v=' + Date.now());
     if (response.ok) {
@@ -524,15 +490,13 @@ async function loadProducts() {
     }
   } catch(e) {}
 
-  // 2. Respaldo confiable: los datos incrustados en este mismo archivo.
-  //    Esto SIEMPRE funciona, sin importar si products.json fallo, no existe,
-  //    o si el archivo se abrio directamente (doble clic) en vez de por un servidor.
+  // 2. Respaldo confiable: datos incrustados en este mismo archivo.
   if (Array.isArray(EMBEDDED_PRODUCTS) && EMBEDDED_PRODUCTS.length > 0) {
     _cachedProducts = EMBEDDED_PRODUCTS;
     return EMBEDDED_PRODUCTS;
   }
 
-  // 3. Ultimo recurso: version vieja guardada en localStorage
+  // 3. Ultimo recurso: localStorage
   try {
     const stored = localStorage.getItem(LS_KEY_PRODUCTS);
     if (stored) {
@@ -562,19 +526,18 @@ function renderCatalog() {
   }
 
   grid.innerHTML = products.map(p => {
-    // Build media HTML
-    let hasDiscount = !!p.oldPrice;
     let discountBadge = '';
 
-    if (hasDiscount) {
+    if (p.oldPrice) {
       const oldNum = parseInt(p.oldPrice.replace(/[^0-9]/g, ''));
       const newNum = parseInt(p.price.replace(/[^0-9]/g, ''));
       if (oldNum > newNum) {
         const pct = Math.round((1 - newNum/oldNum) * 100);
+        discountBadge = `<span class="discount-badge">-${pct}% OFF</span>`;
       }
     }
 
-    // Build media items (only first visible in card)
+    // Build media items
     const mediaItems = p.media.map(m => {
       if (m.type === 'emoji') {
         return `<div class="media-item"><div class="product-ph">${m.content}</div></div>`;
@@ -591,7 +554,15 @@ function renderCatalog() {
     if (p.oldPrice) {
       priceHtml = `<span class="price-old">$ ${formatPrice(p.oldPrice)}</span><span class="price-now">$ ${formatPrice(p.price)}</span>`;
     } else {
-      priceHtml = `$ ${formatPrice(p.price)}`;
+      priceHtml = `<span class="price-now">$ ${formatPrice(p.price)}</span>`;
+    }
+
+    // Recortar nombre si es muy largo
+    let displayName = p.name;
+    if (displayName.includes('Mochila de Capibara')) {
+      displayName = '🧸 Mochila Capibara Kawaii';
+    } else if (displayName.includes('ANTIRROBO')) {
+      displayName = '🎒 Bolso Antirrobo Crossbody';
     }
 
     return `
@@ -602,7 +573,7 @@ function renderCatalog() {
         </div>
         <div class="product-body">
           <span class="product-tag">${p.tag}</span>
-          <h3>${p.name}</h3>
+          <h3>${displayName}</h3>
           <span class="price">${priceHtml}</span>
           <p class="product-desc-hidden">${p.desc}</p>
           <span class="product-view-hint">Ver detalles <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -612,47 +583,29 @@ function renderCatalog() {
   }).join('');
 
   // Re-attach click handlers
-const ANTIRROBO_URL = 'https://nenechi.shop/antirrobo';
-const CAPIBARA_URL  = 'https://nenechi.shop/capibolso';
+  document.querySelectorAll('.product-card').forEach(function(card){
+    const id = card.getAttribute('data-id');
+    const cardProduct = products.find(x => x.id === id);
+    const isAntirrobo = cardProduct && /antirrobo/i.test(cardProduct.name);
+    const isCapibara = cardProduct && (cardProduct.id === 'p2' || /capibara/i.test(cardProduct.name));
 
-document.querySelectorAll('.product-card').forEach(function(card){
-  const id = card.getAttribute('data-id');
-  const cardProduct = products.find(x => x.id === id);
-
-  const isAntirrobo = !!cardProduct && /antirrobo/i.test(cardProduct.name);
-  const isCapibara  = !!cardProduct && /capibara/i.test(cardProduct.name);
-
-  card.addEventListener('click', function(){
-
-    if(isAntirrobo){
-      window.location.href = ANTIRROBO_URL;
-      return;
-    }
-
-    if(isCapibara){
-      window.location.href = CAPIBARA_URL;
-      return;
-    }
-    openProductModal(card);
-  });
-
-  card.addEventListener('keydown', function(e){
-    if(e.key === 'Enter' || e.key === ' '){
-      e.preventDefault();
-
-      if(isAntirrobo){
-        window.location.href = ANTIRROBO_URL;
-        return;
-      }
-
-      if(isCapibara){
-        window.location.href = CAPIBARA_URL;
-        return;
-      }
-
+    card.addEventListener('click', function(){
+      if (isAntirrobo) { window.location.href = ANTIRROBO_URL; return; }
+      if (isCapibara) { window.location.href = CAPIBARA_URL; return; }
       openProductModal(card);
-    }
+    });
+
+    card.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        if (isAntirrobo) { window.location.href = ANTIRROBO_URL; return; }
+        if (isCapibara) { window.location.href = CAPIBARA_URL; return; }
+        openProductModal(card);
+      }
+    });
   });
+}
+
 // ============================
 // INIT
 // ============================
